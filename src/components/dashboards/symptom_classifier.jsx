@@ -19,15 +19,26 @@ class SymptomClassifier extends Component {
 
     async componentDidUpdate(prevProps, prevState) {
         if(prevProps.symptoms !== this.props.symptoms){
-            if(this.props.symptoms.split(', ').length > 1) {
+            if(this.props.symptoms.split(', ').length > 2) {
                 var predictedDisease = await this.predict(this.props.symptoms)
                 this.setState({ predictedDisease })
             } else {
                 this.setState({ predictedDisease: '' })
             }
+            if(this.props.relatedSymptoms)
+                this.setState({ recommendedSymptoms: this.props.relatedSymptoms })
+            
+            this.props.getRelatedSymptoms()
+            .then(({data}) => 
+                this.setState({recommendedSymptoms: data})
+            ).catch(err => 
+                this.setState({recommendedSymptoms: ["ERROR"]})
+            )
         }
     }
 
+
+    //renders all recommended items
     displayInputSymptoms = (symptoms) => {
         if(symptoms[0] !== '' && symptoms.length >= 1) {
             return symptoms.map((item, index) => 
@@ -38,6 +49,7 @@ class SymptomClassifier extends Component {
         }
     }
 
+    //removes an item from recommended-list and adds it to input-list
     removeRecommendedSymptom = (targetIndex) => {
         var { recommendedSymptoms } = this.state
 
@@ -47,6 +59,7 @@ class SymptomClassifier extends Component {
         this.setState({ recommendedSymptoms })
     }
 
+    //uses model to predict disease
     predict = async (symptoms) => {
         var bayes = require('bayes')
         var revivedClassifier = bayes.fromJson(this.state.diseasePredictorModel)

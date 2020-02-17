@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import SymptomClassifier from './symptom_classifier';
+import SymptomsInput from './symptoms_input';
 
 class DiseasePredictorDashboard extends Component {
     state = {
         data: {
-            inputSymptoms: ''
+            inputSymptoms: '',
+            recommendedSymptoms: []
         }
     }
 
-    handleDeleteInputSymptom = (targetIndex) => {
+    getRelatedSymptoms = async () => {
+        return axios({
+            method: 'post',
+            url: "http://localhost:5000/get_related_symptoms",
+            data: {symptoms: this.state.data.inputSymptoms}
+        })
+    }
+
+    //removes an item from input-list 
+    handleRemoveInputSymptom = (targetIndex) => {
         const { inputSymptoms } = this.state.data
 
         var filteredInputSymptoms = inputSymptoms.split(', ').filter((ele, index) => 
@@ -34,34 +46,28 @@ class DiseasePredictorDashboard extends Component {
 
         if(symptomsArray[0] !== '' && symptomsArray.length >= 1) {
             return symptomsArray.map((item, index) => 
-                <li className="delete" key={index} onClick={() => this.handleDeleteInputSymptom(index)}>
+                <li className="delete" key={index} onClick={() => this.handleRemoveInputSymptom(index)}>
                     {item.charAt(0).toUpperCase() + item.slice(1)}
                 </li>
             )
         }
     }
 
-    handleSubmit = () => {
+    handleSubmit = (value) => {
         var { inputSymptoms } = this.state.data
         
         if(inputSymptoms.length > 1)
-            inputSymptoms = inputSymptoms + ', ' + this.refs.symptom.value
+            inputSymptoms = inputSymptoms + ', ' + value
         else
-            inputSymptoms = this.refs.symptom.value
+            inputSymptoms = value
 
         this.setState({ data: {inputSymptoms: inputSymptoms} })
-        this.refs.symptom.value = ''
     }
 
     render() { 
         return ( 
             <section className='container'>
-                <div className="input-group mb-3">
-                    <input className="form-control" type="text" ref="symptom" placeholder="Enter Symptoms..." />
-                    <div className="input-group-append">
-                        <button className="btn btn-outline-secondary" onClick={() => this.handleSubmit()} type="button">Diagnose</button>
-                    </div>
-                </div>
+                <SymptomsInput onClick={(value) => this.handleSubmit(value)} />
                 <div className="mt-5 symptomsContainer">
                     {this.displayInputSymptoms(this.state.data.inputSymptoms)}
                 </div>
@@ -69,6 +75,7 @@ class DiseasePredictorDashboard extends Component {
                     <SymptomClassifier 
                         symptoms={this.state.data.inputSymptoms} 
                         onClick={this.handleAddInputSymptoms}
+                        getRelatedSymptoms={this.getRelatedSymptoms}
                     />
                 </div>
             </section>    
