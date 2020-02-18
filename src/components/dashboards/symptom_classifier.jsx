@@ -31,9 +31,10 @@ class SymptomClassifier extends Component {
             this.props.getRelatedSymptoms()
             .then(({data}) => 
                 this.setState({recommendedSymptoms: data})
-            ).catch(err => 
+            ).catch(err => {
+                console.log(err)
                 this.setState({recommendedSymptoms: ["ERROR"]})
-            )
+            })
         }
     }
 

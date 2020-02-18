@@ -3,7 +3,6 @@ import Joi from 'joi-browser';
 import Input from './input';
 import TextArea from './textArea';
 import Select from './select';
-import UploadImage from './uploadImage';
 
 class Form extends Component {
     state = { 
@@ -30,12 +29,6 @@ class Form extends Component {
         this.setState({ data, errors });
         
     };
-
-    handleFileChange = e => {
-        const data = {...this.state.data}
-        data.image = e.target.files[0]
-        this.setState({data})
-    }
     
     //called by handleChange method to validate individual fields
     validateProperty = input => {
@@ -73,22 +66,7 @@ class Form extends Component {
         this.doSubmit();
     };
 
-    renderImageUpload(name, type='file', className='custom-file') {
-        const { data, errors } = this.state;
-
-        return (
-            <UploadImage
-                type={type}
-                name={name}
-                value={data[name].name}
-                onChange={this.handleFileChange}
-                className={className}
-                error={errors[name]}
-            />
-        )
-    }
-
-    renderInput(name, label, placeholder, type='text', className='form-group') {
+    renderInput(name, label, type='text') {
         const { data, errors } = this.state;
 
         return (
@@ -98,8 +76,6 @@ class Form extends Component {
                 value={data[name]}
                 onChange={this.handleChange}
                 label={label}
-                className={className}
-                placeholder={placeholder}   
                 error={errors[name]} 
             />
         )
@@ -136,7 +112,7 @@ class Form extends Component {
 
     renderButton(label) {
         return (
-            <button disabled={this.validate()} type="submit" className="btn btn-outline-black form-group float-right">
+            <button disabled={this.validate()} type="submit" className="btn btn-outline-secondary mb-3 float-right">
                 {label}
             </button>
         );

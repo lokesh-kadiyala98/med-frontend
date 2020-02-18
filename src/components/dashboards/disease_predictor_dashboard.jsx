@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import SymptomClassifier from './symptom_classifier';
 import SymptomsInput from './symptoms_input';
+import '../../config.json'
 
 class DiseasePredictorDashboard extends Component {
     state = {
@@ -12,9 +13,10 @@ class DiseasePredictorDashboard extends Component {
     }
 
     getRelatedSymptoms = async () => {
+        console.log(this.state.data.inputSymptoms)
         return axios({
             method: 'post',
-            url: "http://localhost:5000/get_related_symptoms",
+            url: "http://localhost:5000/disease_symptoms/get_related_symptoms",
             data: {symptoms: this.state.data.inputSymptoms}
         })
     }
