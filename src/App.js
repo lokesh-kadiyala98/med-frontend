@@ -1,25 +1,47 @@
 import React, { Component } from 'react';
-import NavBar from './components/misc/naviagtion';
 import { Route, Switch } from 'react-router-dom';
-import 'react-toastify/dist/ReactToastify.min.css';
-import './components/resources/css/style.css'
+import jwtDecode from 'jwt-decode';
+
+import NavBar from './components/misc/naviagtion';
 import RegisterLogin from './components/register_login';
+import Logout from './components/logout';
+import Profile from './components/profile';
 import Home from './components/home';
 import Dashboards from './components/dashboards/dashboards';
-import DiseasePredictorDashboard from './components/dashboards/disease_predictor_dashboard';
+import DiagnoseYourDisease from './components/dashboards/diagnoseYourDisease';
+import KnowYourHeart from './components/dashboards/knowYourHeart';
+
+import 'react-toastify/dist/ReactToastify.min.css';
+import './components/resources/css/style.css'
+import './components/resources/js/helperScript'
 
 class App extends Component {
+
+  state = { }
+
+  componentDidMount() {
+    try {
+      const token = localStorage.getItem('token')
+      const { user } = jwtDecode(token)
+      this.setState({ user })
+    } catch(ex) { }
+  }
 
   render() { 
     return ( 
       <React.Fragment>
-        <NavBar />
-        <Switch>
-          <Route path="/dashboards/disease_predictor_dashboard" component={DiseasePredictorDashboard} />
-          <Route path="/login" component={RegisterLogin} />
-          <Route path="/dashboards" component={Dashboards} />
-          <Route path="/" exact component={Home} />
-        </Switch>
+        <NavBar user={this.state.user} />
+        <div className='container'>
+          <Switch>
+            <Route path="/dashboards/diagnoseYourDisease" component={DiagnoseYourDisease} />
+            <Route path="/dashboards/knowYourHeart" component={KnowYourHeart} />
+            <Route path="/logout" component={Logout} />
+            <Route path="/login" component={RegisterLogin} />
+            <Route path="/profile" component={Profile} />
+            <Route path="/dashboards" component={Dashboards} />
+            <Route path="/" exact component={Home} />
+          </Switch>
+        </div>
       </React.Fragment>
     );
   }

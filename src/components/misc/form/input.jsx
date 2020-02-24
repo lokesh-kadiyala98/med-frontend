@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Input = ({ type, name, label, value, error, onChange, placeholder, className }) => {
+const Input = ({ type, name, label, value, error, onChange, className }) => {
     return ( 
         <div className="mb-3">
             <div className="input-group">
@@ -8,6 +8,7 @@ const Input = ({ type, name, label, value, error, onChange, placeholder, classNa
                     <span className="input-group-text">{label}</span>
                 </div>    
                 <input
+                    disabled={value && true}
                     type={type} 
                     name={name}
                     value={value}

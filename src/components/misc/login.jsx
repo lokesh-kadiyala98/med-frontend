@@ -1,6 +1,7 @@
 import React from 'react';
 import Form from './form/form';
 import Joi from 'joi-browser';
+import axios from 'axios';
 
 class Login extends Form {
 
@@ -19,12 +20,28 @@ class Login extends Form {
     }
 
     schema = {
-        username: Joi.string().label('Username').min(3).max(15),
-        password: Joi.string().label('Password').min(3).max(15)
+        username: Joi.string().label('Username').min(3).max(30).required(),
+        password: Joi.string().label('Password').min(4).max(15).required()
     }
 
     doSubmit = async () => {
-        console.log('Login Submitted')
+
+        try {
+            var res = await axios({
+                method: 'post',
+                url: 'http://localhost:5000/users/user_login',
+                data: this.state.data
+            })
+            localStorage.setItem('token', res.data.token)
+            window.location = '/'
+        } catch (ex) {
+            if(ex.response.status === 400 && ex.response.data) {
+                const errors = {...this.state.errors}
+                errors.username = ex.response.data.error
+                this.setState({ errors })
+            }
+        }
+
     }
 
     render() { 

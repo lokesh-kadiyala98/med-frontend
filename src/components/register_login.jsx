@@ -11,8 +11,8 @@ class RegisterLogin extends Component {
         return ( 
             <section className="container">
                 <div className="row">
-                    <Register />
-                    <Login />
+                    <Register history={this.props.history} />
+                    <Login history={this.props.history} />
                 </div>
             </section>
         );

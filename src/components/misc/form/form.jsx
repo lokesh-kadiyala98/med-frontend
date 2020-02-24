@@ -3,6 +3,7 @@ import Joi from 'joi-browser';
 import Input from './input';
 import TextArea from './textArea';
 import Select from './select';
+import Radio from './radio';
 
 class Form extends Component {
     state = { 
@@ -68,7 +69,6 @@ class Form extends Component {
 
     renderInput(name, label, type='text') {
         const { data, errors } = this.state;
-
         return (
             <Input 
                 type={type}
@@ -112,11 +112,25 @@ class Form extends Component {
 
     renderButton(label) {
         return (
-            <button disabled={this.validate()} type="submit" className="btn btn-outline-secondary mb-3 float-right">
+            <button disabled={this.validate()} onClick={(e) => this.handleSubmit(e)} type="submit" className="btn btn-outline-secondary mb-3 float-right">
                 {label}
             </button>
         );
     };
+
+    renderRadio(name, label, options) {
+        const { data, errors } = this.state
+        return (
+            <Radio
+                name={name}
+                value={data[name]}
+                onChange={this.handleChange}
+                options={options}
+                label={label}   
+                error={errors[name]}
+            />
+        )
+    }
 }
  
 export default Form;

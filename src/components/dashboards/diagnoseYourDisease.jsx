@@ -4,7 +4,7 @@ import SymptomClassifier from './symptom_classifier';
 import SymptomsInput from './symptoms_input';
 import '../../config.json'
 
-class DiseasePredictorDashboard extends Component {
+class DiagnoseYourDisease extends Component {
     state = {
         data: {
             inputSymptoms: '',
@@ -68,7 +68,7 @@ class DiseasePredictorDashboard extends Component {
 
     render() { 
         return ( 
-            <section className='container'>
+            <section>
                 <SymptomsInput onClick={(value) => this.handleSubmit(value)} />
                 <div className="mt-5 symptomsContainer">
                     {this.displayInputSymptoms(this.state.data.inputSymptoms)}
@@ -85,4 +85,4 @@ class DiseasePredictorDashboard extends Component {
     }
 }
  
-export default DiseasePredictorDashboard;
+export default DiagnoseYourDisease;
