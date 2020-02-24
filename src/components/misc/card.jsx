@@ -6,7 +6,13 @@ const Card = ({ img, cardBody, cardTitle }) => {
             <img className="card-img-top img-fluid" src={img} alt="" />
             <div className="card-body">
             <h4 className="card-title">{cardTitle}</h4>
-                <p className="card-text">{cardBody}</p>
+            <ul>
+                <p className="card-text">
+                        {cardBody.split(', ').map((item, index) => 
+                            <li key={index} className='mb-1'>{item}</li> 
+                        )}        
+                </p>
+            </ul>
             </div>
         </div>
     );

@@ -13,7 +13,6 @@ class Form extends Component {
 
     //Validates an individual property. Called when a change occurs in input fields.
     handleChange = e => {
-
         const errors = {...this.state.errors};
         
         //currentTarget holds the field being changed
@@ -28,7 +27,6 @@ class Form extends Component {
         
         //for every key pressed in input field, call setState to update the state object.
         this.setState({ data, errors });
-        
     };
     
     //called by handleChange method to validate individual fields

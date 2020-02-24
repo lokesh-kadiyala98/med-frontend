@@ -3,9 +3,6 @@ import $ from 'jquery'
 import jwtDecode from 'jwt-decode'
 import Joi from 'joi-browser'
 
-import lazySloth from '../resources/img/lazy-man.jpg'
-import mediocreActive from '../resources/img/mediocre-active.png'
-import workoutHero from '../resources/img/workout-hero.png'
 import Form from './../misc/form/form';
 
 class KnowYourHeart extends Form {
@@ -36,7 +33,7 @@ class KnowYourHeart extends Form {
         age: Joi.number().label('Age'),
         weight: Joi.number().label('Weight'),
         height: Joi.number().min(1).max(7).label('Height'),
-        bmi: Joi.number().label('BMI'),
+        bmi: Joi.string().label('BMI'),
         exerciseFreq: Joi.number().label('Frequency'),
         diet: Joi.number().label('Diet'),
         alcohol: Joi.number().label('Alcohol')
@@ -86,7 +83,7 @@ class KnowYourHeart extends Form {
         try {
             const token = localStorage.getItem('token')
             const {user} = jwtDecode(token)
-            console.log(user)
+
             var data = {...this.state.data}
             data.gender = user.gender
             data.age = this.getAge(user.dob)
@@ -100,16 +97,20 @@ class KnowYourHeart extends Form {
     }
 
     render() { 
-        console.log(this.state.data)
         const genderOptions = [
             [{_id: 'male', name: 'Male'}],
             [{_id: 'female', name: 'Female'}],
             [{_id: 'others', name: 'Others'}],
         ] 
         const activityOptions = [
-            [{_id: 'workout-hero', name: 'exerciseFreq', img: workoutHero, cardTitle: 'Workout Hero', cardBody: 'Hits gym 5-7 days a week'}],
-            [{_id: 'mediocre-active', name: 'exerciseFreq', img: mediocreActive, cardTitle: 'Mediocre Active', cardBody: 'Hits gym 5-7 days a week'}],
-            [{_id: 'lazy-sloth', name: 'exerciseFreq', img: lazySloth, cardTitle: 'Lazy Sloth', cardBody: 'Hits gym 5-7 days a week'}],
+            [{_id: 'workout-hero', img: require('../resources/img/workout-hero.png'), cardTitle: 'Workout Hero', cardBody: 'Hits gym 5-7 days a week'}],
+            [{_id: 'mediocre-active', img: require('../resources/img/mediocre-active.png'), cardTitle: 'Mediocre Active', cardBody: 'Professionally active'}],
+            [{_id: 'lazy-sloth', img: require('../resources/img/lazy-man.jpg'), cardTitle: 'Lazy Sloth', cardBody: 'Less physical activity'}],
+        ]
+        const alcoholOptions = [
+            [{_id: 'frequent', liquid: 90, cardTitle: 'Frequent', cardBody: 'Hits gym 5-7 days a week'}],
+            [{_id: 'occasional', liquid: 40, cardTitle: 'Occasional', cardBody: 'Professionally active'}],
+            [{_id: 'never', liquid: 0, cardTitle: 'Never', cardBody: 'Less physical activity'}],
         ]
         return ( 
             <React.Fragment>
@@ -127,6 +128,8 @@ class KnowYourHeart extends Form {
                     {this.renderInput('height','Height (feet.inch)', 'number')}
                     {this.renderInput('bmi', 'BMI')}
                     {this.renderRadio('exerciseFreq', 'How active are you?', activityOptions)}
+                    {this.renderRadio('alcohol', 'How much alcohol do you consume?', alcoholOptions)}
+                    {this.renderButton('Submit')}
                 </div>
 
             </React.Fragment>

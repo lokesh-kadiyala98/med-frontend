@@ -3,10 +3,6 @@ ul {
     padding: 0;
     list-style-type: none;
 }
-  
-li {
-    display: table-cell;
-}
 
 .symptomsContainer li{
     list-style-type: none;
@@ -74,18 +70,22 @@ li {
     margin: 30px;
 }
 
+.radio-container > li {
+    display: table-cell;
+}
+
 input[type="radio"] {
     display: none;
 }
   
-label {
+.radio-container label {
     display: block;
     position: relative;
     margin: 5px;
     cursor: pointer;
 }
   
-label:before {
+.radio-container label:before {
     background-color: white;
     color: white;
     content: " ";
@@ -123,4 +123,103 @@ label img {
 :checked + label .card {
     transform: scale(0.9);
     /* box-shadow: 0 0 5px #333; */
+}
+
+.liquid:after {
+    background-color: rgba(255, 255, 255, 0.25);
+    bottom: -10px;
+    content: '';
+    height: 290px;
+    left: 10px;
+    position: absolute;
+    transform: rotate(30deg);
+    -webkit-transform: rotate(15deg);
+    width: 60px;
+}
+
+.beer-glass .liquid{
+    position: relative;
+    background-color: #edaf32;
+    border-radius: 0 0 20px 20px;
+}
+
+.liquid .bubble {
+    position: absolute;
+    -webkit-animation-name: bubble;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function: linear;
+    background-color: rgba(255, 255, 255, 0.2);
+    bottom: 0;
+    border-radius: 10px;
+    height: 20px;
+    width: 20px;
+}
+
+@keyframes bubble {
+    0% { bottom: 0; }
+
+    50% {
+        background-color: rgba(255, 255, 255, 0.3);
+        bottom: 80px;
+    }
+
+    75% {
+        background-color: rgba(255, 255, 255, 0.2);
+        bottom: 120px;
+    }
+ 
+    100% {
+        background-color: rgba(255, 255, 255, 0);
+        bottom: 160px;
+    }  
+}
+
+@-webkit-keyframes bubble {
+  0% { bottom: 0; }
+
+   50% {
+     background-color: rgba(255, 255, 255, 0.2);
+      bottom: 80px;
+   }
+
+   100% {
+     background-color: rgba(255, 255, 255, 0);
+      bottom: 160px;
+   }
+}
+
+.bubble1 {
+  left: 10px;
+  -webkit-animation-delay: 1000ms;
+  -webkit-animation-duration: 2000ms;
+}
+
+.bubble2 {
+  left: 50px;
+  width: 10px;
+  -webkit-animation-delay: 700ms;
+  -webkit-animation-duration: 1100ms;
+}
+
+.bubble3 {
+  left: 100px;
+  -webkit-animation-delay: 1200ms;
+  -webkit-animation-duration: 3300ms;
+}
+
+.bubble4 {
+  left: 130px;
+  -webkit-animation-delay: 1100ms;
+  -webkit-animation-duration: 1700ms;
+}
+
+.bubble5 {
+  left: 170px;
+  -webkit-animation-delay: 1300ms;
+  -webkit-animation-duration: 1800ms;
+}
+
+.card-text li:before {
+    content: "\2714\0020";
+    color: #2ecc71;
 }
