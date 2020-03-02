@@ -155,8 +155,11 @@ label img {
 
 .liquid .bubble {
     position: absolute;
+    animation-name: bubble;
     -webkit-animation-name: bubble;
+    animation-iteration-count: infinite;
     -webkit-animation-iteration-count: infinite;
+    animation-timing-function: linear;
     -webkit-animation-timing-function: linear;
     background-color: rgba(255, 255, 255, 0.2);
     bottom: 0;
@@ -200,32 +203,42 @@ label img {
 
 .bubble1 {
   left: 10px;
+  animation-delay: 1000ms;
   -webkit-animation-delay: 1000ms;
+  animation-duration: 2000ms;
   -webkit-animation-duration: 2000ms;
 }
 
 .bubble2 {
   left: 50px;
   width: 10px;
+  animation-delay: 700ms;
   -webkit-animation-delay: 700ms;
+  animation-duration: 1100ms;
   -webkit-animation-duration: 1100ms;
 }
 
 .bubble3 {
   left: 100px;
+  animation-delay: 1200ms;
   -webkit-animation-delay: 1200ms;
-  -webkit-animation-duration: 3300ms;
+  animation-duration: 2300ms;
+  -webkit-animation-duration: 2300ms;
 }
 
 .bubble4 {
   left: 130px;
+  animation-delay: 1100ms;
   -webkit-animation-delay: 1100ms;
+  animation-duration: 1700ms;
   -webkit-animation-duration: 1700ms;
 }
 
 .bubble5 {
   left: 170px;
+  animation-delay: 1300ms;
   -webkit-animation-delay: 1300ms;
+  animation-duration: 1800ms;
   -webkit-animation-duration: 1800ms;
 }
 

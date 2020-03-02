@@ -148,7 +148,7 @@ class KnowYourHeart extends Form {
         const dietOptions = [
             [{_id: 'healthy', cardTitle: 'Heart Healthy', cardBody: 'Low-fat dairy products, Legumes & Nuts, Green salads'}],
             [{_id: 'calorie-restricted', cardTitle: 'Calorie Restricted', cardBody: 'Whole grains, High fiber foods'}],
-            [{_id: 'binging', cardTitle: 'Binging', cardBody: 'High Carbs, Low in fiber, High in salt'}],
+            [{_id: 'binging', cardTitle: 'Binging', cardBody: 'High in Fat, Low in fiber, High in salt'}],
             [{_id: 'processed', cardTitle: 'Processed Foods', cardBody: 'Chocolates, Chips, Canned Soda'}],
             [{_id: 'sweet-tooth', cardTitle: 'Sweet Tooth', cardBody: 'Sugar loaded, Caffeine, Simple carbohydarates'}],
         ]
