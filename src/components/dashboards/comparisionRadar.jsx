@@ -49,7 +49,7 @@ const ComparisionRadar = ({ data }) => {
                     riskyLdl,
                     riskyHdl, 
                     riskyCholestrol, 
-                    convertToRange(4, 1, 5),
+                    convertToRange(11100, 1, 11111),
                     convertToRange(2.5, 1, 3),
                     convertToRange(2, 1, 2), 
                     convertToRange(3.5, 1, 4),
@@ -70,7 +70,7 @@ const ComparisionRadar = ({ data }) => {
                     healthyLdl,
                     healthyHdl, 
                     healthyCholestrol, 
-                    convertToRange(1.5, 1, 5),
+                    convertToRange(11, 1, 11111),
                     convertToRange(1.5, 1, 3),
                     convertToRange(1, 1, 2), 
                     convertToRange(1, 1, 4),
@@ -91,12 +91,12 @@ const ComparisionRadar = ({ data }) => {
                     ldl,
                     hdl, 
                     cholestrol, 
-                    convertToRange(data.diet, 1, 5) + 10,
-                    convertToRange(data.alcohol, 1, 3) + 15,
-                    convertToRange(data.diabetic, 1, 2) + 5,
+                    convertToRange(data.diet, 1, 11111),
+                    convertToRange(data.alcohol, 1, 3),
+                    convertToRange(data.diabetic, 1, 2),
                     convertToRange(data.diabeticDuration === '' ? 1: data.diabeticDuration, 1, 4),
-                    convertToRange(data.exerciseFreq, 1, 3) + 17,
-                    convertToRange(data.heartDiseaseHistory, 1, 2) + 11
+                    convertToRange(data.exerciseFreq, 1, 3),
+                    convertToRange(data.heartDiseaseHistory, 1, 2)
                 ]
             }
         ]

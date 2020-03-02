@@ -148,9 +148,9 @@ class KnowYourHeart extends Form {
         const dietOptions = [
             [{_id: 'healthy', cardTitle: 'Heart Healthy', cardBody: 'Low-fat dairy products, Legumes & Nuts, Omega-3 foods', value: 1}],
             [{_id: 'calorie-restricted', cardTitle: 'Calorie Restricted', cardBody: 'Green Salads, Whole grains, High fiber foods', value: 10}],
-            [{_id: 'binging', cardTitle: 'Cholestrol Foods', cardBody: 'Deep Fried, High in Fat, Low in Fiber', value: 100}],
-            [{_id: 'processed', cardTitle: 'Processed Foods', cardBody: 'Packed Food, Chips, Canned Soda', value: 1000}],
-            [{_id: 'sweet-tooth', cardTitle: 'Sweet Loaded', cardBody: 'Sweets, Sugar Beverages, chocolates', value: 10000}],
+            [{_id: 'processed', cardTitle: 'Processed Foods', cardBody: 'Packed Food, Chips, Canned Soda', value: 100}],
+            [{_id: 'sweet-tooth', cardTitle: 'Sweet Loaded', cardBody: 'Sweets, Sugar Beverages, chocolates', value: 1000}],
+            [{_id: 'binging', cardTitle: 'Cholestrol Foods', cardBody: 'Deep Fried, High in Fat, Low in Fiber', value: 10000}],
         ]
         return ( 
             <React.Fragment>
@@ -191,7 +191,6 @@ class KnowYourHeart extends Form {
                     }
                     {this.renderRadio('exerciseFreq', 'How active are you?', activityOptions)}
                     {this.renderRadio('alcohol', 'How much alcohol do you consume?', alcoholOptions)}
-                    {/* {this.renderRadio('diet', 'Which matches your diet?', dietOptions)} */}
                     {this.renderCheckbox('diet', 'Which food habits matches your daily diet?', dietOptions)}
                      
                     {this.renderButton('Submit')}

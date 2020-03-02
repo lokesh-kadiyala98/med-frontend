@@ -3,12 +3,12 @@ import { Row, Col } from 'react-bootstrap';
 
 import Card from './../card';
 
-const CheckBox = ({ name, label, options, error, onChange }) => {
+const CheckBox = ({ name, value, label, options, error, onChange }) => {    
     return ( 
         <div className='mb-3 radio-container'>
             <span className='pl-3'>{label}</span>
             <Row className='no-gutters'>
-                {options.map((option, index) => 
+                {options.map(option => 
                     <Col key={option[0]._id} lg={3} md={4} xs={6}>
                         <li>
                             <input type='checkbox' value={option[0].value} onChange={onChange} name={name} id={option[0]._id} />

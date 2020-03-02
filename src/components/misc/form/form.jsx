@@ -24,9 +24,12 @@ class Form extends Component {
 
         const data = {...this.state.data};
         const name = e.currentTarget.name
-        if(e.currentTarget.type === 'checkbox')
+        if(!e.currentTarget.checked) {
+            data[e.currentTarget.name].splice(data[e.currentTarget.name].indexOf(e.currentTarget.value), 1)
+        }
+        if(e.currentTarget.type === 'checkbox' && e.currentTarget.checked)
             data[e.currentTarget.name].push(e.currentTarget.value)
-        else
+        if(e.currentTarget.type !== 'checkbox')
             data[e.currentTarget.name] = e.currentTarget.value;
         
         //for every key pressed in input field, call setState to update the state object.

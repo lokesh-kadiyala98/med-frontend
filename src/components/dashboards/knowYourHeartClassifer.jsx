@@ -24,6 +24,7 @@ class KnowYourHeartClassifier extends Component {
         const data = {...this.state.data}         
         console.log(data)
 
+        console.log(this.state.data)
         data.diet = data.diet.reduce((x, y) => parseInt(x) + parseInt(y))
 
         var data1 = {
