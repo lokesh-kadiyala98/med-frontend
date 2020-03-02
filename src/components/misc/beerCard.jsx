@@ -1,7 +1,5 @@
 import React from 'react';
 
-import '../resources/css/beer.css'
-
 const BeerCard = ({ liquid, cardTitle, cardBody }) => {
     var emptyHeight = 250 * ((100 - liquid) / 100)
     var liquidHeight = 250 * (liquid / 100)

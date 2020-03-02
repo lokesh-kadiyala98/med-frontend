@@ -14,7 +14,6 @@ class Form extends Component {
     //Validates an individual property. Called when a change occurs in input fields.
     handleChange = e => {
         const errors = {...this.state.errors};
-        
         //currentTarget holds the field being changed
         const errorMessages = this.validateProperty(e.currentTarget);
 
@@ -23,10 +22,19 @@ class Form extends Component {
         else delete errors[e.currentTarget.name];
 
         const data = {...this.state.data};
+        const name = e.currentTarget.name
         data[e.currentTarget.name] = e.currentTarget.value;
         
         //for every key pressed in input field, call setState to update the state object.
-        this.setState({ data, errors });
+        this.setState({ data, errors }, () => {
+            if(name === 'weight' || name === 'height') {
+                if(this.state.data.weight && this.state.data.height) {
+                    data['bmi'] = this.getBmi(this.state.data.weight, this.state.data.height)
+                    this.setState({ data })
+                }
+            }
+        });
+
     };
     
     //called by handleChange method to validate individual fields
@@ -65,12 +73,13 @@ class Form extends Component {
         this.doSubmit();
     };
 
-    renderInput(name, label, type='text') {
+    renderInput(name, label, type='text', disabled=false) {
         const { data, errors } = this.state;
         return (
             <Input 
                 type={type}
                 name={name}
+                disabled={disabled}
                 value={data[name]}
                 onChange={this.handleChange}
                 label={label}
@@ -81,7 +90,6 @@ class Form extends Component {
 
     renderSelect(name, label, options) {
         const { data, errors } = this.state;
-
         return (
             <Select 
                 name={name}
@@ -96,7 +104,6 @@ class Form extends Component {
 
     renderTextArea(name, label) {
         const { data , errors } = this.state;
-
         return (
             <TextArea
                 name={name}

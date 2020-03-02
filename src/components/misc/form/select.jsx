@@ -9,7 +9,9 @@ const Select = ({ name, label, options, error, ...rest }) => {
                 </div>    
                 <select name={name} id={name} {...rest} className="form-control">
                     <option value="" />
-                    {options.map(option =>  <option key={option[0]._id} value={option[0]._id}>{option[0].name}</option>)}
+                    {options.map((option) =>  
+                        <option key={option[0]._id} value={option[0].value}>{option[0].name}</option>)
+                    }
                 </select>    
             </div>
             {error && <div className="alert alert-danger">{error}</div>}

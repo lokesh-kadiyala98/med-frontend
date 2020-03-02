@@ -2,8 +2,10 @@ import React from 'react';
 import $ from 'jquery'
 import jwtDecode from 'jwt-decode'
 import Joi from 'joi-browser'
+import _ from 'lodash'
 
 import Form from './../misc/form/form';
+import KnowYourHeartClassifier from './knowYourHeartClassifer';
 
 class KnowYourHeart extends Form {
 
@@ -16,16 +18,22 @@ class KnowYourHeart extends Form {
     state = { 
         user: {},
         data: {
-            gender: '',
-            age: '',
-            weight: '',
-            height: '',
-            bmi: '',
-            exerciseFreq: '',
-            diet: '',
-            alcohol: ''
+            gender: '1',
+            age: '17',
+            weight: '62',
+            height: '5.7',
+            bmi: 'Healthy.',
+            ldl: '120',
+            hdl: '70',
+            heartDiseaseHistory: '1',
+            exerciseFreq: '3',
+            diabetic: '1',
+            diabeticDuration: '',
+            alcohol: '1',
+            diet: '1',
         },
-        errors: {}
+        errors: {}, 
+        viewReport: false,
     }
 
     schema = {
@@ -34,9 +42,14 @@ class KnowYourHeart extends Form {
         weight: Joi.number().label('Weight'),
         height: Joi.number().min(1).max(7).label('Height'),
         bmi: Joi.string().label('BMI'),
+        ldl: Joi.number().label('Low Density Lipo-protein Cholestrol'),
+        hdl: Joi.number().label('High Density Lipo-protein Cholestrol'),
+        heartDiseaseHistory: Joi.number().label('Disease History'),
         exerciseFreq: Joi.number().label('Frequency'),
+        diabetic: Joi.number().label('Diabetic'),
+        diabeticDuration: Joi.when('diabetic', {is: '1', then: Joi.required()}),
+        alcohol: Joi.number().label('Alcohol'),
         diet: Joi.number().label('Diet'),
-        alcohol: Joi.number().label('Alcohol')
     }
 
     heartBeat() {
@@ -63,7 +76,7 @@ class KnowYourHeart extends Form {
 
     getBmi(weight, height) {
         if(weight > 0 && height > 0) {	
-            var finalBmi = weight/(height/100*height/100)
+            var finalBmi = weight/((height*0.3048)*(height*0.3048))
             if(finalBmi < 18.5) {
                 return "Under Weight."
             }
@@ -73,8 +86,6 @@ class KnowYourHeart extends Form {
             if(finalBmi > 25) {
                 return "Overweight."
             }
-        } else {
-            alert("Please Fill in everything correctly")
         }
     }
 
@@ -83,7 +94,7 @@ class KnowYourHeart extends Form {
         try {
             const token = localStorage.getItem('token')
             const {user} = jwtDecode(token)
-
+            this.setState({ user })
             var data = {...this.state.data}
             data.gender = user.gender
             data.age = this.getAge(user.dob)
@@ -96,21 +107,50 @@ class KnowYourHeart extends Form {
         
     }
 
+    handleCloseReport = () => {
+        this.setState({ viewReport: false })
+    }
+
+    doSubmit = () => {
+        this.setState({ viewReport: true })
+    }
+
     render() { 
         const genderOptions = [
-            [{_id: 'male', name: 'Male'}],
-            [{_id: 'female', name: 'Female'}],
-            [{_id: 'others', name: 'Others'}],
+            [{_id: 'male', name: 'Male', value: 1}],
+            [{_id: 'female', name: 'Female', value: 0}],
+            [{_id: 'others', name: 'Others', value: 2}],
+        ]
+        const diabeticOptions = [
+            [{_id: 'yes', name: 'Yes', value: 2}],
+            [{_id: 'no', name: 'No', value: 1}],
+        ]
+        const diabeticDurationOptions = [
+            [{_id: '0', name: '< 1 Year', value: 1}],
+            [{_id: '1', name: '1 Year - 4 Years', value: 2}],
+            [{_id: '2', name: '5 Years - 7 Years', value: 3}],
+            [{_id: '3', name: '> 7 Years', value: 4}],
+        ]
+        const heartDiseaseHistoryOptions = [
+            [{_id: 'yes', name: 'Yes', value: 2}],
+            [{_id: 'no', name: 'No', value: 1}],
         ] 
         const activityOptions = [
-            [{_id: 'workout-hero', img: require('../resources/img/workout-hero.png'), cardTitle: 'Workout Hero', cardBody: 'Hits gym 5-7 days a week'}],
-            [{_id: 'mediocre-active', img: require('../resources/img/mediocre-active.png'), cardTitle: 'Mediocre Active', cardBody: 'Professionally active'}],
             [{_id: 'lazy-sloth', img: require('../resources/img/lazy-man.jpg'), cardTitle: 'Lazy Sloth', cardBody: 'Less physical activity'}],
+            [{_id: 'mediocre-active', img: require('../resources/img/mediocre-active.png'), cardTitle: 'Mediocre Active', cardBody: 'Professionally active'}],
+            [{_id: 'workout-hero', img: require('../resources/img/workout-hero.png'), cardTitle: 'Workout Hero', cardBody: 'Hits gym 5-7 days a week'}],
         ]
         const alcoholOptions = [
-            [{_id: 'frequent', liquid: 90, cardTitle: 'Frequent', cardBody: 'Hits gym 5-7 days a week'}],
-            [{_id: 'occasional', liquid: 40, cardTitle: 'Occasional', cardBody: 'Professionally active'}],
-            [{_id: 'never', liquid: 0, cardTitle: 'Never', cardBody: 'Less physical activity'}],
+            [{_id: 'never', liquid: 5, cardTitle: 'Never', cardBody: 'Non-Alcoholic'}],
+            [{_id: 'occasional', liquid: 60, cardTitle: 'Occasional', cardBody: 'Not more than 40 fl. oz. per week'}],
+            [{_id: 'frequent', liquid: 90, cardTitle: 'Frequent', cardBody: 'More than 60 fl. oz. per week'}],
+        ]
+        const dietOptions = [
+            [{_id: 'healthy', cardTitle: 'Heart Healthy', cardBody: 'Low-fat dairy products, Legumes & Nuts, Green salads'}],
+            [{_id: 'calorie-restricted', cardTitle: 'Calorie Restricted', cardBody: 'Whole grains, High fiber foods'}],
+            [{_id: 'binging', cardTitle: 'Binging', cardBody: 'High Carbs, Low in fiber, High in salt'}],
+            [{_id: 'processed', cardTitle: 'Processed Foods', cardBody: 'Chocolates, Chips, Canned Soda'}],
+            [{_id: 'sweet-tooth', cardTitle: 'Sweet Tooth', cardBody: 'Sugar loaded, Caffeine, Simple carbohydarates'}],
         ]
         return ( 
             <React.Fragment>
@@ -119,19 +159,44 @@ class KnowYourHeart extends Form {
                 </div>
 
                 <div>
-                    {this.state.data.gender ?
-                        this.renderInput('gender','Gender') :
-                        this.renderSelect('gender', 'Gender', genderOptions)
+                    {_.isEmpty(this.state.user) ?
+                        this.renderSelect('gender', 'Gender', genderOptions) :
+                        this.renderInput('gender','Gender', 'text', true) 
                     }
-                    {this.renderInput('age','Age', 'number')}
-                    {this.renderInput('weight','Weight (KGs)', 'number')}
-                    {this.renderInput('height','Height (feet.inch)', 'number')}
-                    {this.renderInput('bmi', 'BMI')}
+                    {_.isEmpty(this.state.user) ?
+                        this.renderInput('age','Age', 'number') :
+                        this.renderInput('age','Age', 'number', true) 
+                    }
+                    {_.isEmpty(this.state.user) ?
+                        this.renderInput('weight','Weight (KGs)', 'number') :
+                        this.renderInput('weight','Weight (KGs)', 'number', true) 
+                    }
+                    {_.isEmpty(this.state.user) ?
+                        this.renderInput('height','Height (feet.inch)', 'number') :
+                        this.renderInput('height','Height (feet.inch)', 'number', true)
+                    }
+                    {this.renderInput('bmi', 'BMI', 'text', true)}
+                    <div className="group-form-elements mb-2 p-3">
+                        <p>
+                            Cholestrol
+                        </p>
+                        {this.renderInput('ldl', 'LDL', 'number')}
+                        {this.renderInput('hdl', 'HDL', 'number')}
+                    </div>
+                    {this.renderSelect('heartDiseaseHistory', 'Heart Disease History in Family?', heartDiseaseHistoryOptions)}
+                    {this.renderSelect('diabetic', 'Diabetic', diabeticOptions)}
+                    {this.state.data.diabetic === '1' ? 
+                        this.renderSelect('diabeticDuration', 'How long have you been Diabetic?', diabeticDurationOptions) :
+                        ''
+                    }
                     {this.renderRadio('exerciseFreq', 'How active are you?', activityOptions)}
                     {this.renderRadio('alcohol', 'How much alcohol do you consume?', alcoholOptions)}
+                    {this.renderRadio('diet', 'Which matches your diet?', dietOptions)}
+
                     {this.renderButton('Submit')}
                 </div>
-
+                
+                {this.state.viewReport ? <KnowYourHeartClassifier data={this.state.data} handleCloseReport={this.handleCloseReport} /> : ''}
             </React.Fragment>
          );
     }

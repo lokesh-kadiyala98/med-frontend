@@ -14,6 +14,8 @@ import KnowYourHeart from './components/dashboards/knowYourHeart';
 import 'react-toastify/dist/ReactToastify.min.css';
 import './components/resources/css/style.css'
 import './components/resources/js/helperScript'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 class App extends Component {
 

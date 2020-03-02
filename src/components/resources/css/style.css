@@ -4,6 +4,10 @@ ul {
     list-style-type: none;
 }
 
+li {
+    list-style: none;
+}
+
 .symptomsContainer li{
     list-style-type: none;
     padding: 5px 15px;
@@ -70,6 +74,11 @@ ul {
     margin: 30px;
 }
 
+.group-form-elements {
+    border: 1px solid #ced4da;
+}
+
+/* Radio Card */
 .radio-container > li {
     display: table-cell;
 }
@@ -125,6 +134,7 @@ label img {
     /* box-shadow: 0 0 5px #333; */
 }
 
+/* Beer Card styling */
 .liquid:after {
     background-color: rgba(255, 255, 255, 0.25);
     bottom: -10px;
@@ -219,7 +229,23 @@ label img {
   -webkit-animation-duration: 1800ms;
 }
 
-.card-text li:before {
+/* Tick Mark */
+.card-text li:before, .tick:before {
     content: "\2714\0020";
     color: #2ecc71;
+}
+
+.point:before {
+    content: '\25C9\0020';
+    color: #17a2b8;
+}
+
+.cross:before {
+    content: "\274C\0020";
+    color: #dc3545;
+}
+
+.ReactModal__Content .close:hover {
+    color: #dc3545;
+    transform: scale(0.9);
 }
