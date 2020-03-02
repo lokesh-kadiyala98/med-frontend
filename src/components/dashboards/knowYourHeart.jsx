@@ -23,14 +23,14 @@ class KnowYourHeart extends Form {
             weight: '62',
             height: '5.7',
             bmi: 'Healthy.',
-            ldl: '120',
-            hdl: '70',
+            ldl: '90',
+            hdl: '50',
             heartDiseaseHistory: '1',
             exerciseFreq: '3',
             diabetic: '1',
             diabeticDuration: '',
             alcohol: '1',
-            diet: '1',
+            diet: [],
         },
         errors: {}, 
         viewReport: false,
@@ -49,7 +49,7 @@ class KnowYourHeart extends Form {
         diabetic: Joi.number().label('Diabetic'),
         diabeticDuration: Joi.when('diabetic', {is: '1', then: Joi.required()}),
         alcohol: Joi.number().label('Alcohol'),
-        diet: Joi.number().label('Diet'),
+        diet: Joi.allow('').label('Diet'),
     }
 
     heartBeat() {
@@ -146,11 +146,11 @@ class KnowYourHeart extends Form {
             [{_id: 'frequent', liquid: 90, cardTitle: 'Frequent', cardBody: 'More than 60 fl. oz. per week'}],
         ]
         const dietOptions = [
-            [{_id: 'healthy', cardTitle: 'Heart Healthy', cardBody: 'Low-fat dairy products, Legumes & Nuts, Green salads'}],
-            [{_id: 'calorie-restricted', cardTitle: 'Calorie Restricted', cardBody: 'Whole grains, High fiber foods'}],
-            [{_id: 'binging', cardTitle: 'Binging', cardBody: 'High in Fat, Low in fiber, High in salt'}],
-            [{_id: 'processed', cardTitle: 'Processed Foods', cardBody: 'Chocolates, Chips, Canned Soda'}],
-            [{_id: 'sweet-tooth', cardTitle: 'Sweet Tooth', cardBody: 'Sugar loaded, Caffeine, Simple carbohydarates'}],
+            [{_id: 'healthy', cardTitle: 'Heart Healthy', cardBody: 'Low-fat dairy products, Legumes & Nuts, Omega-3 foods', value: 1}],
+            [{_id: 'calorie-restricted', cardTitle: 'Calorie Restricted', cardBody: 'Green Salads, Whole grains, High fiber foods', value: 10}],
+            [{_id: 'binging', cardTitle: 'Cholestrol Foods', cardBody: 'Deep Fried, High in Fat, Low in Fiber', value: 100}],
+            [{_id: 'processed', cardTitle: 'Processed Foods', cardBody: 'Packed Food, Chips, Canned Soda', value: 1000}],
+            [{_id: 'sweet-tooth', cardTitle: 'Sweet Loaded', cardBody: 'Sweets, Sugar Beverages, chocolates', value: 10000}],
         ]
         return ( 
             <React.Fragment>
@@ -185,14 +185,15 @@ class KnowYourHeart extends Form {
                     </div>
                     {this.renderSelect('heartDiseaseHistory', 'Heart Disease History in Family?', heartDiseaseHistoryOptions)}
                     {this.renderSelect('diabetic', 'Diabetic', diabeticOptions)}
-                    {this.state.data.diabetic === '1' ? 
+                    {this.state.data.diabetic === '2' ? 
                         this.renderSelect('diabeticDuration', 'How long have you been Diabetic?', diabeticDurationOptions) :
                         ''
                     }
                     {this.renderRadio('exerciseFreq', 'How active are you?', activityOptions)}
                     {this.renderRadio('alcohol', 'How much alcohol do you consume?', alcoholOptions)}
-                    {this.renderRadio('diet', 'Which matches your diet?', dietOptions)}
-
+                    {/* {this.renderRadio('diet', 'Which matches your diet?', dietOptions)} */}
+                    {this.renderCheckbox('diet', 'Which food habits matches your daily diet?', dietOptions)}
+                     
                     {this.renderButton('Submit')}
                 </div>
                 

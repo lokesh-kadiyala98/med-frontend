@@ -9,7 +9,7 @@ const Card = ({ img, cardBody, cardTitle }) => {
             <ul>
                 <p className="card-text">
                         {cardBody.split(', ').map((item, index) => 
-                            <li key={index} className='mb-1'>{item}</li> 
+                            <li key={index} className='mb-1 point'>{item}</li> 
                         )}        
                 </p>
             </ul>

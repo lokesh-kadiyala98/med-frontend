@@ -4,6 +4,7 @@ import Input from './input';
 import TextArea from './textArea';
 import Select from './select';
 import Radio from './radio';
+import CheckBox from './checkbox';
 
 class Form extends Component {
     state = { 
@@ -23,7 +24,10 @@ class Form extends Component {
 
         const data = {...this.state.data};
         const name = e.currentTarget.name
-        data[e.currentTarget.name] = e.currentTarget.value;
+        if(e.currentTarget.type === 'checkbox')
+            data[e.currentTarget.name].push(e.currentTarget.value)
+        else
+            data[e.currentTarget.name] = e.currentTarget.value;
         
         //for every key pressed in input field, call setState to update the state object.
         this.setState({ data, errors }, () => {
@@ -48,8 +52,8 @@ class Form extends Component {
     //called by handleSubmit method 
     validate = () => {
         //Joi.validate returns an object that has error details
-        const results = Joi.validate(this.state.data, this.schema, { abortEarly: false });
-        
+        var results = Joi.validate(this.state.data, this.schema, { abortEarly: false });
+
         if(!results.error) return null;
 
         const errors = {}; 
@@ -63,7 +67,11 @@ class Form extends Component {
     handleSubmit = e => {
         e.preventDefault();
 
-        const errors = this.validate();
+        var errors = this.validate();
+
+        if(this.state.data.diet.length === 0)
+            errors = {...errors, diet: "'Diet' must not be empty"}
+        
         //if there are errors then set the state with errors. 
         //Else set it with an empty object.
         this.setState({ errors: errors || {} });
@@ -127,6 +135,20 @@ class Form extends Component {
         const { data, errors } = this.state
         return (
             <Radio
+                name={name}
+                value={data[name]}
+                onChange={this.handleChange}
+                options={options}
+                label={label}   
+                error={errors[name]}
+            />
+        )
+    }
+
+    renderCheckbox(name, label, options) {
+        const { data, errors } = this.state
+        return (
+            <CheckBox
                 name={name}
                 value={data[name]}
                 onChange={this.handleChange}

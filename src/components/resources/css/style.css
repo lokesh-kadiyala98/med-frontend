@@ -83,7 +83,7 @@ li {
     display: table-cell;
 }
 
-input[type="radio"] {
+input[type="radio"], input[type="checkbox"] {
     display: none;
 }
   
@@ -242,8 +242,7 @@ label img {
   -webkit-animation-duration: 1800ms;
 }
 
-/* Tick Mark */
-.card-text li:before, .tick:before {
+.tick:before {
     content: "\2714\0020";
     color: #2ecc71;
 }
