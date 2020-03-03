@@ -3,7 +3,6 @@ import Card from './../card';
 import BeerCard from './../beerCard';
 
 const Radio = ({ name, label, value, options, error, onChange }) => {
-    console.log(value)
     return ( 
         <div className='mb-3 radio-container'>
             <span className='pl-3'>{label}</span>

@@ -24,8 +24,13 @@ class KnowYourHeartClassifier extends Component {
         const data = {...this.state.data}         
         console.log(data)
 
-        console.log(this.state.data)
-        data.diet = data.diet.reduce((x, y) => parseInt(x) + parseInt(y))
+        var dietBits = data.diet.reduce((x, y) => parseInt(x) + parseInt(y))
+
+        if(dietBits.toString().length < 5)
+            for(let i = dietBits.toString().length; i<5; i++)
+                dietBits = '0' + dietBits
+        
+        data.diet = dietBits.toString()
 
         var data1 = {
             labels: ['No', 'Yes'], 
@@ -83,6 +88,42 @@ class KnowYourHeartClassifier extends Component {
                 }
             }
         }
+
+        var prob = 1
+        if(data.gender === '1' && data.age > 45)
+            prob *= 9
+        else if((data.gender === '2' || data.gender === '3') && data.age > 55)
+            prob *= 9
+
+        if((data.bmi === 'Overweight' && data.exerciseFreq === '1') || (data.exerciseFreq === '1' && (data.hdl + data.ldl) > 240))
+            prob += 7 + 7 * (prob / 10)
+        
+        if(data.heartDiseaseHistory === '2') 
+            prob += 3 + 3 * (prob / 10)
+
+        if(data.diabetic === '2') {
+            prob += 2 + 2 * (prob / 10)
+        
+            if(data.diet.charAt(1) === '1')
+                prob += 1 + 1 * (prob / 10)
+            
+            if(data.diabeticDuration === '3')
+                prob += 2 + 2 * (prob / 10)
+            if(data.diabeticDuration === '4') {
+                prob += 3 + 3 * (prob / 10)   
+            }
+        }
+
+        if(data.alcohol === '2')
+            prob += 1 + 1 * (prob / 10)
+        else if (data.alcohol === '3')
+            prob += 1.6 + 1.6 * (prob / 10)
+
+        
+        if(data.diet.charAt(0) === '1')
+           prob += 2 + 2 * (prob / 10)
+        
+        console.log(prob)
 
         var analysisCharts = []
         

@@ -19,17 +19,17 @@ class KnowYourHeart extends Form {
         user: {},
         data: {
             gender: '1',
-            age: '17',
+            age: '56',
             weight: '62',
-            height: '5.7',
-            bmi: 'Healthy.',
-            ldl: '90',
-            hdl: '50',
-            heartDiseaseHistory: '1',
-            exerciseFreq: '3',
-            diabetic: '1',
-            diabeticDuration: '',
-            alcohol: '1',
+            height: '4.7',
+            bmi: 'Overweight',
+            ldl: '180',
+            hdl: '70',
+            heartDiseaseHistory: '2',
+            exerciseFreq: '1',
+            diabetic: '2',
+            diabeticDuration: '3',
+            alcohol: '3',
             diet: [],
         },
         errors: {}, 
@@ -78,13 +78,13 @@ class KnowYourHeart extends Form {
         if(weight > 0 && height > 0) {	
             var finalBmi = weight/((height*0.3048)*(height*0.3048))
             if(finalBmi < 18.5) {
-                return "Under Weight."
+                return "Under Weight"
             }
             if(finalBmi > 18.5 && finalBmi < 25) {
-                return "Healthy."
+                return "Healthy"
             }
             if(finalBmi > 25) {
-                return "Overweight."
+                return "Overweight"
             }
         }
     }
@@ -149,7 +149,7 @@ class KnowYourHeart extends Form {
             [{_id: 'healthy', cardTitle: 'Heart Healthy', cardBody: 'Low-fat dairy products, Legumes & Nuts, Omega-3 foods', value: 1}],
             [{_id: 'calorie-restricted', cardTitle: 'Calorie Restricted', cardBody: 'Green Salads, Whole grains, High fiber foods', value: 10}],
             [{_id: 'processed', cardTitle: 'Processed Foods', cardBody: 'Packed Food, Chips, Canned Soda', value: 100}],
-            [{_id: 'sweet-tooth', cardTitle: 'Sweet Loaded', cardBody: 'Sweets, Sugar Beverages, chocolates', value: 1000}],
+            [{_id: 'sweet-tooth', cardTitle: 'Sugar Loaded', cardBody: 'Sweets, Sugar Beverages, chocolates', value: 1000}],
             [{_id: 'binging', cardTitle: 'Cholestrol Foods', cardBody: 'Deep Fried, High in Fat, Low in Fiber', value: 10000}],
         ]
         return ( 

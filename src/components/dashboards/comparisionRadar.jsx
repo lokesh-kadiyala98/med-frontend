@@ -105,7 +105,6 @@ const ComparisionRadar = ({ data }) => {
         scale: {
             ticks: {
                 beginAtZero: true,
-                min: 0,
                 max: 120,
                 stepSize: 10
             }
