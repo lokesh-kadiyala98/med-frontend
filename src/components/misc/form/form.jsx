@@ -12,27 +12,25 @@ class Form extends Component {
         errors: {},
     };
 
-    //Validates an individual property. Called when a change occurs in input fields.
     handleChange = e => {
         const errors = {...this.state.errors};
-        //currentTarget holds the field being changed
         const errorMessages = this.validateProperty(e.currentTarget);
 
-        //currentTarget.name is the name given to input field that is being changed
         if(errorMessages) errors[e.currentTarget.name] = errorMessages;
         else delete errors[e.currentTarget.name];
 
         const data = {...this.state.data};
         const name = e.currentTarget.name
-        if(!e.currentTarget.checked) {
+
+        //add/delete from checkbox array if checked/unchecked
+        if(e.currentTarget.type === 'checkbox' && !e.currentTarget.checked) 
             data[e.currentTarget.name].splice(data[e.currentTarget.name].indexOf(e.currentTarget.value), 1)
-        }
-        if(e.currentTarget.type === 'checkbox' && e.currentTarget.checked)
+        else if(e.currentTarget.type === 'checkbox' && e.currentTarget.checked)
             data[e.currentTarget.name].push(e.currentTarget.value)
+        
         if(e.currentTarget.type !== 'checkbox')
             data[e.currentTarget.name] = e.currentTarget.value;
         
-        //for every key pressed in input field, call setState to update the state object.
         this.setState({ data, errors }, () => {
             if(name === 'weight' || name === 'height') {
                 if(this.state.data.weight && this.state.data.height) {
@@ -44,7 +42,6 @@ class Form extends Component {
 
     };
     
-    //called by handleChange method to validate individual fields
     validateProperty = input => {
         const obj = { [input.name]: input.value };
         const schema = { [input.name]: this.schema[input.name] };
@@ -52,7 +49,6 @@ class Form extends Component {
         return error ? error.details[0].message : null;
     };
 
-    //called by handleSubmit method 
     validate = () => {
         //Joi.validate returns an object that has error details
         var results = Joi.validate(this.state.data, this.schema, { abortEarly: false });
@@ -66,7 +62,6 @@ class Form extends Component {
         return errors;
     };
 
-    //called when the form is submitted
     handleSubmit = e => {
         e.preventDefault();
 
