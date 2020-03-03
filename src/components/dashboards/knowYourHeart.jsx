@@ -18,7 +18,7 @@ class KnowYourHeart extends Form {
     state = { 
         user: {},
         data: {
-            gender: '1',
+            gender: '2',
             age: '56',
             weight: '62',
             height: '4.7',
@@ -28,7 +28,7 @@ class KnowYourHeart extends Form {
             heartDiseaseHistory: '2',
             exerciseFreq: '1',
             diabetic: '2',
-            diabeticDuration: '3',
+            diabeticDuration: '4',
             alcohol: '3',
             diet: [],
         },
