@@ -18,8 +18,8 @@ class KnowYourHeart extends Form {
     state = { 
         user: {},
         data: {
-            gender: '2',
-            age: '56',
+            gender: '1',
+            age: '57',
             weight: '62',
             height: '4.7',
             bmi: 'Overweight',
@@ -30,7 +30,8 @@ class KnowYourHeart extends Form {
             diabetic: '2',
             diabeticDuration: '4',
             alcohol: '3',
-            diet: [],
+            smoke: '2',
+            diet: [10000],
         },
         errors: {}, 
         viewReport: false,
@@ -49,6 +50,7 @@ class KnowYourHeart extends Form {
         diabetic: Joi.number().label('Diabetic'),
         diabeticDuration: Joi.when('diabetic', {is: '1', then: Joi.required()}),
         alcohol: Joi.number().label('Alcohol'),
+        smoke: Joi.number().label('Smoke'),
         diet: Joi.allow('').label('Diet'),
     }
 
@@ -145,6 +147,10 @@ class KnowYourHeart extends Form {
             [{_id: 'occasional', liquid: 60, cardTitle: 'Occasional', cardBody: 'Not more than 40 fl. oz. per week'}],
             [{_id: 'frequent', liquid: 90, cardTitle: 'Frequent', cardBody: 'More than 60 fl. oz. per week'}],
         ]
+        const smokeOptions = [
+            [{_id: 'yes', name: 'Yes', value: 2}],
+            [{_id: 'no', name: 'No', value: 1}],
+        ]
         const dietOptions = [
             [{_id: 'healthy', cardTitle: 'Heart Healthy', cardBody: 'Low-fat dairy products, Legumes & Nuts, Omega-3 foods', value: 1}],
             [{_id: 'calorie-restricted', cardTitle: 'Calorie Restricted', cardBody: 'Green Salads, Whole grains, High fiber foods', value: 10}],
@@ -191,6 +197,7 @@ class KnowYourHeart extends Form {
                     }
                     {this.renderRadio('exerciseFreq', 'How active are you?', activityOptions)}
                     {this.renderRadio('alcohol', 'How much alcohol do you consume?', alcoholOptions)}
+                    {this.renderSelect('smoke', 'Do you smoke?', smokeOptions)}
                     {this.renderCheckbox('diet', 'Which food habits matches your daily diet?', dietOptions)}
                      
                     {this.renderButton('Submit')}

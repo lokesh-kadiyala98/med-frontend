@@ -15,17 +15,17 @@ const ComparisionRadar = ({ data }) => {
         hdl = convertToRange(data.hdl, 1, 100)
         cholestrol = convertToRange(parseInt(data.ldl) + parseInt(data.hdl), 100, 300)
         healthyLdl = convertToRange(50, 1, 200)
-        healthyHdl = convertToRange(70, 1, 100)
+        healthyHdl = convertToRange(60, 1, 100)
         healthyCholestrol = convertToRange(120, 1, 300)
         riskyLdl = convertToRange(140, 1, 200)
-        riskyHdl = convertToRange(40, 1, 100)
-        riskyCholestrol = convertToRange(180, 100, 300)
+        riskyHdl = convertToRange(20, 1, 100)
+        riskyCholestrol = convertToRange(200, 100, 300)
     } else {
         ldl = convertToRange(data.ldl, 1, 300)
         hdl = convertToRange(data.hdl, 1, 100)
         cholestrol = convertToRange(parseInt(data.ldl) + parseInt(data.hdl), 100, 400)
         healthyLdl = convertToRange(40, 1, 300)
-        healthyHdl = convertToRange(80, 1, 100)
+        healthyHdl = convertToRange(60, 1, 100)
         healthyCholestrol = convertToRange(120, 1, 400)
         riskyLdl = convertToRange(160, 1, 300)
         riskyHdl = convertToRange(40, 1, 100)
@@ -33,7 +33,6 @@ const ComparisionRadar = ({ data }) => {
     } 
         
     var patientData = { 
-            
         labels: ['Age', 'LDL', 'HDL', 'Cholestrol', 'Diet', 'Alcohol', 'Diabetic', 'Diabetic Duration', 'Exercise Freq', 'Disease History - Hereditary',],    
         datasets: [
             {
@@ -52,7 +51,7 @@ const ComparisionRadar = ({ data }) => {
                     convertToRange(11100, 1, 11111),
                     convertToRange(2.5, 1, 3),
                     convertToRange(2, 1, 2), 
-                    convertToRange(3.5, 1, 4),
+                    convertToRange(3.5, 0, 4),
                     convertToRange(1.2, 1, 3),
                     convertToRange(1.8, 1, 2)
                 ]
@@ -73,7 +72,7 @@ const ComparisionRadar = ({ data }) => {
                     convertToRange(11, 1, 11111),
                     convertToRange(1.5, 1, 3),
                     convertToRange(1, 1, 2), 
-                    convertToRange(1, 1, 4),
+                    convertToRange(1, 0, 4),
                     convertToRange(2, 1, 3),
                     convertToRange(1.4, 1, 2)
                 ]
@@ -94,7 +93,7 @@ const ComparisionRadar = ({ data }) => {
                     convertToRange(data.diet, 1, 11111),
                     convertToRange(data.alcohol, 1, 3),
                     convertToRange(data.diabetic, 1, 2),
-                    convertToRange(data.diabeticDuration === '' ? 1: data.diabeticDuration, 1, 4),
+                    convertToRange(data.diabeticDuration === '' ? 0: data.diabeticDuration, 0, 4),
                     convertToRange(data.exerciseFreq, 1, 3),
                     convertToRange(data.heartDiseaseHistory, 1, 2)
                 ]
