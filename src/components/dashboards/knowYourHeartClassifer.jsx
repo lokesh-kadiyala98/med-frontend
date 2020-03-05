@@ -13,16 +13,80 @@ import ComparisionRadar from './comparisionRadar';
 class KnowYourHeartClassifier extends Component {
     state = { 
         showModal: true,
+        user: {},
         data: {},
+        score: '',
         analysisCharts : [],
     }
 
     componentDidMount() {
-        const { data } = this.props
+        const { data, user } = this.props
 
-        this.setState({ data }, () => {
+        this.setState({ data, user }, () => {
             this.analyze()
         })
+    }
+
+    calculateScore = (data) => {
+        var prob = 1
+
+        if(data.gender === '1' && data.age > 45)
+            prob *= 8
+        else if((data.gender === '2' || data.gender === '0') && data.age > 55)
+            prob *= 6
+
+        if((data.bmi === 'Overweight' && data.exerciseFreq === '1') || (data.exerciseFreq === '1' && (parseInt(data.hdl) + parseInt(data.ldl)) > 200))
+            prob += 4 + 4 * (prob / 10)
+        else if(data.exerciseFreq === '1')
+            prob += 2 + 2 * (prob / 10)
+        
+        if((parseInt(data.hdl) + parseInt(data.ldl) > 200 && data.age < 18))
+            prob += 4 + 4 * (prob / 10)
+
+        if(parseInt(data.hdl) + parseInt(data.ldl) > 240 && data.age > 18) {
+            prob += 0.4 + 0.4 * (prob / 10)
+            if(data.diet.charAt(1) === '1' && parseInt(data.ldl) > 100)
+                prob += 0.8 + 0.8 * (prob / 10)
+        }
+
+        if(data.exerciseFreq === '2')
+            prob += 1 + 1 * (prob / 10)
+            
+        if(data.heartDiseaseHistory === '2') 
+            prob += 2.1 + 2.1 * (prob / 10)
+
+        if(data.diabetic === '2') {
+            prob += 2 + 2 * (prob / 10)
+        
+            if(data.diet.charAt(1) === '1')
+                prob += 1 + 1 * (prob / 10)
+            
+            if(data.diabeticDuration === '3')
+                prob += 2 + 2 * (prob / 10)
+            if(data.diabeticDuration === '4') 
+                prob += 3 + 3 * (prob / 10)   
+        }
+
+        if(data.alcohol === '2')
+            prob += 0.6 + 0.6 * (prob / 10)
+        else if (data.alcohol === '3')
+            prob += 1.2 + 1.2 * (prob / 10)
+
+        if(data.smoke === '2')
+            prob += 0.9 + 0.9 * (prob / 10)
+
+        if(data.diet.charAt(1) === '1') {
+            prob += 1.2 + 1.2 * (prob / 10)
+        }    
+        
+        if(data.diet.charAt(0) === '1') {
+            prob += 2 + 2 * (prob / 10)
+            if(prob < 10) {
+                prob += 4 + 4 * (prob / 10)
+            }
+        }
+
+        return prob
     }
 
     analyze = () => {
@@ -94,65 +158,10 @@ class KnowYourHeartClassifier extends Component {
             }
         }
 
-        var prob = 1
-        if(data.gender === '1' && data.age > 45)
-            prob *= 8
-        else if((data.gender === '2' || data.gender === '0') && data.age > 55)
-            prob *= 6
+        var score = 100 - this.calculateScore(data).toFixed(2)
+        score = score.toFixed(2)
 
-        if((data.bmi === 'Overweight' && data.exerciseFreq === '1') || (data.exerciseFreq === '1' && (parseInt(data.hdl) + parseInt(data.ldl)) > 200))
-            prob += 4 + 4 * (prob / 10)
-        else if(data.exerciseFreq === '1')
-            prob += 2 + 2 * (prob / 10)
-        
-        if((parseInt(data.hdl) + parseInt(data.ldl) > 200 && data.age < 18))
-            prob += 4 + 4 * (prob / 10)
-
-        if(parseInt(data.hdl) + parseInt(data.ldl) > 240 && data.age > 18) {
-            prob += 0.4 + 0.4 * (prob / 10)
-            if(data.diet.charAt(1) === '1' && parseInt(data.ldl) > 100)
-                prob += 0.8 + 0.8 * (prob / 10)
-        }
-
-        if(data.exerciseFreq === '2')
-            prob += 1 + 1 * (prob / 10)
-            
-        if(data.heartDiseaseHistory === '2') 
-            prob += 2.1 + 2.1 * (prob / 10)
-
-        if(data.diabetic === '2') {
-            prob += 2 + 2 * (prob / 10)
-        
-            if(data.diet.charAt(1) === '1')
-                prob += 1 + 1 * (prob / 10)
-            
-            if(data.diabeticDuration === '3')
-                prob += 2 + 2 * (prob / 10)
-            if(data.diabeticDuration === '4') 
-                prob += 3 + 3 * (prob / 10)   
-        }
-
-        if(data.alcohol === '2')
-            prob += 0.6 + 0.6 * (prob / 10)
-        else if (data.alcohol === '3')
-            prob += 1.2 + 1.2 * (prob / 10)
-
-        if(data.smoke === '2')
-            prob += 0.9 + 0.9 * (prob / 10)
-
-        if(data.diet.charAt(1) === '1') {
-            prob += 1.2 + 1.2 * (prob / 10)
-        }    
-        
-        if(data.diet.charAt(0) === '1') {
-            prob += 2 + 2 * (prob / 10)
-            if(prob < 10) {
-                prob += 4 + 4 * (prob / 10)
-            }
-        }
-        
-        var score = 100 - prob.toFixed(2)
-        score = score.toFixed(1)
+        this.setState({ score })
 
         if(score < 0)
             score = 6.7
@@ -289,8 +298,8 @@ class KnowYourHeartClassifier extends Component {
         try {
             var res = await axios({
                 method: 'post',
-                url: 'http://localhost:5000/users/kyh_save_attributes',
-                data: this.state.data
+                url: 'http://localhost:5000/users/kyh_save_data',
+                data: {...this.state.data, userID: this.state.user._id, score: this.state.score}
             })
             if(res.status === 200)
                 toast.success(res.data.message)

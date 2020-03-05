@@ -203,7 +203,7 @@ class KnowYourHeart extends Form {
                     {this.renderButton('Submit')}
                 </div>
                 
-                {this.state.viewReport ? <KnowYourHeartClassifier data={this.state.data} handleCloseReport={this.handleCloseReport} /> : ''}
+                {this.state.viewReport ? <KnowYourHeartClassifier data={this.state.data} user={this.state.user} handleCloseReport={this.handleCloseReport} /> : ''}
             </React.Fragment>
          );
     }
