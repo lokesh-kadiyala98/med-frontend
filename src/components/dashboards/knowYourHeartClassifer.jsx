@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 import ReactModal from 'react-modal'
 import { Pie, Radar } from 'react-chartjs-2'
 import { Row, Col } from 'react-bootstrap'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
+import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import ComparisionRadar from './comparisionRadar';
 
@@ -24,8 +29,6 @@ class KnowYourHeartClassifier extends Component {
         const data = {...this.state.data}         
         data.diabeticDuration = data.diabetic === '1' ? 0 : data.diabeticDuration
         
-        console.log(data)
-
         var dietBits = data.diet.reduce((x, y) => parseInt(x) + parseInt(y))
 
         if(dietBits.toString().length < 5)
@@ -266,7 +269,7 @@ class KnowYourHeartClassifier extends Component {
             }
         }
 
-        const p = data.diet.charAt(1) === '1' ? <p className="cross text-center">Your <b>Diet</b> has high risk factor.</p> : <p className="tick text-center">Your Diet has less risk factor.</p>
+        const p = data.diet.charAt(0) === '1' ? <p className="cross text-center">Your <b>Diet</b> has high risk factor.</p> : <p className="tick text-center">Your Diet has less risk factor.</p>
         
         analysisCharts.push(
             <Row className="align-items-center mt-5">
@@ -282,13 +285,43 @@ class KnowYourHeartClassifier extends Component {
         this.setState({ showModal: false })
     }
 
+    handleSave = async () => {
+        try {
+            var res = await axios({
+                method: 'post',
+                url: 'http://localhost:5000/users/kyh_save_attributes',
+                data: this.state.data
+            })
+            if(res.status === 200)
+                toast.success(res.data.message)
+        } catch (ex) {
+            if(ex.response.status && ex.response.data) {
+                toast.error(ex.response.data.error)
+            }
+        }
+    }
+
+    handleDownload = () => {
+        html2canvas(document.querySelector('.ReactModal__Content--after-open'))
+            .then((canvas) => {
+                const imgData = canvas.toDataURL('image/png');
+                console.log(imgData, document.querySelector('#user-report'))
+                const pdf = new jsPDF();
+                pdf.addImage(imgData, 'PNG', 0, 0, 200, 114);
+                pdf.save("download.pdf");  
+            })
+    }
+
     render() {
         return ( 
-            <ReactModal 
+            <ReactModal id="user-report"
                 ariaHideApp={false}
                 isOpen={this.state.showModal}
                 contentLabel="Minimal Modal Example">
+                <ToastContainer autoClose={5000}/>
                 <button className="close" onClick={() => {this.handleCloseModal(); this.props.handleCloseReport();}}><i className="fas fa-times"></i></button>
+                <button className="download" onClick={this.handleDownload}><i className="fas fa-download"></i></button>
+                <button className="save" onClick={this.handleSave}><i className="fas fa-cloud-download-alt"></i></button>
                 {this.state.analysisCharts.map((item, key) => 
                     <li key={key}>{item}</li>
                 )}

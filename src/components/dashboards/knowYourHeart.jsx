@@ -38,7 +38,7 @@ class KnowYourHeart extends Form {
     }
 
     schema = {
-        gender: Joi.string().label('Gender'),
+        gender: Joi.number().label('Gender'),
         age: Joi.number().label('Age'),
         weight: Joi.number().label('Weight'),
         height: Joi.number().min(1).max(7).label('Height'),
@@ -98,11 +98,11 @@ class KnowYourHeart extends Form {
             const {user} = jwtDecode(token)
             this.setState({ user })
             var data = {...this.state.data}
-            data.gender = user.gender
+            data.gender = user.gender === 'male' ? 1 : user.gender === 'female' ? 0 : 2
             data.age = this.getAge(user.dob)
             data.weight = user.weight
             data.height = user.height
-            data.bmi = this.getBmi(user.weight, user.height * 30.48)
+            data.bmi = this.getBmi(user.weight, user.height)
 
             this.setState({ data })
         } catch(ex) { }
@@ -167,7 +167,7 @@ class KnowYourHeart extends Form {
                 <div>
                     {_.isEmpty(this.state.user) ?
                         this.renderSelect('gender', 'Gender', genderOptions) :
-                        this.renderInput('gender','Gender', 'text', true) 
+                        this.renderSelect('gender','Gender', genderOptions, true) 
                     }
                     {_.isEmpty(this.state.user) ?
                         this.renderInput('age','Age', 'number') :

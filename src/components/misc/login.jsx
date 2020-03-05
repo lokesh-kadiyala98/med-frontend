@@ -25,7 +25,6 @@ class Login extends Form {
     }
 
     doSubmit = async () => {
-
         try {
             var res = await axios({
                 method: 'post',
@@ -41,7 +40,6 @@ class Login extends Form {
                 this.setState({ errors })
             }
         }
-
     }
 
     render() { 

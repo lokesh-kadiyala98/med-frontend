@@ -261,3 +261,24 @@ label img {
     color: #dc3545;
     transform: scale(0.9);
 }
+
+.save, .download {
+    background-color: transparent;
+    border: 0;
+    line-height: 1;
+    font-size: 1.2rem;
+    margin-right: 5px;
+    float: right;
+    font-weight: 100;
+    opacity: 0.5;
+}
+
+.download:hover {
+    color: #2ecc71;
+    transform: scale(0.9);
+}
+
+.save:hover {
+    color: #e67e22;
+    transform: scale(0.9);
+}

@@ -67,8 +67,9 @@ class Form extends Component {
 
         var errors = this.validate();
 
-        if(this.state.data.diet.length === 0)
-            errors = {...errors, diet: "'Diet' must not be empty"}
+        if(this.state.data.diet)
+            if(this.state.data.diet.length === 0)
+                errors = {...errors, diet: "'Diet' must not be empty"}
         
         //if there are errors then set the state with errors. 
         //Else set it with an empty object.
@@ -94,7 +95,7 @@ class Form extends Component {
         )
     };
 
-    renderSelect(name, label, options) {
+    renderSelect(name, label, options, disabled=false) {
         const { data, errors } = this.state;
         return (
             <Select 
@@ -102,6 +103,7 @@ class Form extends Component {
                 value={data[name]}
                 onChange={this.handleChange}
                 options={options}
+                disabled={disabled}
                 label={label}   
                 error={errors[name]} 
             />
