@@ -24,15 +24,15 @@ class KnowYourHeart extends Form {
             weight: '',
             height: '',
             bmi: '',
-            ldl: '62',
-            hdl: '71',
-            heartDiseaseHistory: '2',
-            exerciseFreq: '3',
-            diabetic: '2',
-            diabeticDuration: '4',
-            alcohol: '3',
-            smoke: '2',
-            diet: [10000],
+            ldl: '',
+            hdl: '',
+            heartDiseaseHistory: '',
+            exerciseFreq: '',
+            diabetic: '',
+            diabeticDuration: '',
+            alcohol: '',
+            smoke: '',
+            diet: [],
         },
         errors: {}, 
         viewReport: false,
@@ -117,7 +117,6 @@ class KnowYourHeart extends Form {
     }
 
     render() { 
-        console.log(this.state.user)
         const genderOptions = [
             [{_id: 'male', name: 'Male', value: 1}],
             [{_id: 'female', name: 'Female', value: 0}],

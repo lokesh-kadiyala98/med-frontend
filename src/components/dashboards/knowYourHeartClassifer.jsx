@@ -6,6 +6,7 @@ import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
+import _ from 'lodash'
 
 import ComparisionRadar from './comparisionRadar';
 
@@ -89,15 +90,15 @@ class KnowYourHeartClassifier extends Component {
     }
 
     analyze = () => {
-        const data = {...this.state.data}         
+        const data = {...this.state.data}  
+        var score = 0
+        
         data.diabeticDuration = data.diabetic === '1' ? 0 : data.diabeticDuration
         
         var dietBits = data.diet.reduce((x, y) => parseInt(x) + parseInt(y))
-
         if(dietBits.toString().length < 5)
             for(let i=dietBits.toString().length; i<5; i++)
                 dietBits = '0' + dietBits
-        
         data.diet = dietBits.toString()
 
         var data1 = {
@@ -157,8 +158,12 @@ class KnowYourHeartClassifier extends Component {
             }
         }
 
-        var score = 100 - this.calculateScore(data).toFixed(2)
-        score = score.toFixed(2)
+        if(data.score)
+            score = data.score
+        else {
+            score = 100 - this.calculateScore(data).toFixed(2)
+            score = score.toFixed(2)
+        }
 
         this.setState({ score })
 
@@ -313,7 +318,6 @@ class KnowYourHeartClassifier extends Component {
         html2canvas(document.querySelector('.ReactModal__Content--after-open'))
             .then((canvas) => {
                 const imgData = canvas.toDataURL('image/png');
-                console.log(imgData, document.querySelector('#user-report'))
                 const pdf = new jsPDF();
                 pdf.addImage(imgData, 'PNG', 0, 0, 200, 114);
                 pdf.save("download.pdf");  
@@ -328,8 +332,12 @@ class KnowYourHeartClassifier extends Component {
                 contentLabel="Minimal Modal Example">
                 <ToastContainer autoClose={5000}/>
                 <button className="close" onClick={() => {this.handleCloseModal(); this.props.handleCloseReport();}}><i className="fas fa-times"></i></button>
-                <button className="download" onClick={this.handleDownload}><i className="fas fa-download"></i></button>
-                <button className="save" onClick={this.handleSave}><i className="fas fa-cloud-download-alt"></i></button>
+                {_.isEmpty(this.state.user) ? null:
+                    <React.Fragment>
+                        <button className="download" onClick={this.handleDownload}><i className="fas fa-download"></i></button>
+                        <button className="save" onClick={this.handleSave}><i className="fas fa-cloud-download-alt"></i></button>
+                    </React.Fragment>
+                }
                 {this.state.analysisCharts.map((item, key) => 
                     <li key={key}>{item}</li>
                 )}
