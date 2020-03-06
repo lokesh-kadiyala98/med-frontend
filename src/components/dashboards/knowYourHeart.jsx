@@ -6,6 +6,7 @@ import _ from 'lodash'
 
 import Form from './../misc/form/form';
 import KnowYourHeartClassifier from './knowYourHeartClassifer';
+import KYHArchieves from './KYHArchieves';
 
 class KnowYourHeart extends Form {
 
@@ -23,15 +24,15 @@ class KnowYourHeart extends Form {
             weight: '',
             height: '',
             bmi: '',
-            ldl: '',
-            hdl: '',
-            heartDiseaseHistory: '',
-            exerciseFreq: '',
-            diabetic: '',
-            diabeticDuration: '',
-            alcohol: '',
-            smoke: '',
-            diet: [],
+            ldl: '62',
+            hdl: '71',
+            heartDiseaseHistory: '2',
+            exerciseFreq: '3',
+            diabetic: '2',
+            diabeticDuration: '4',
+            alcohol: '3',
+            smoke: '2',
+            diet: [10000],
         },
         errors: {}, 
         viewReport: false,
@@ -91,12 +92,11 @@ class KnowYourHeart extends Form {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.heartBeat()
         try {
             const token = localStorage.getItem('token')
             const {user} = jwtDecode(token)
-            this.setState({ user })
             var data = {...this.state.data}
             data.gender = user.gender === 'male' ? 1 : user.gender === 'female' ? 0 : 2
             data.age = this.getAge(user.dob)
@@ -104,9 +104,8 @@ class KnowYourHeart extends Form {
             data.height = user.height
             data.bmi = this.getBmi(user.weight, user.height)
 
-            this.setState({ data })
+            this.setState({ data, user })
         } catch(ex) { }
-        
     }
 
     handleCloseReport = () => {
@@ -118,6 +117,7 @@ class KnowYourHeart extends Form {
     }
 
     render() { 
+        console.log(this.state.user)
         const genderOptions = [
             [{_id: 'male', name: 'Male', value: 1}],
             [{_id: 'female', name: 'Female', value: 0}],
@@ -160,6 +160,7 @@ class KnowYourHeart extends Form {
         ]
         return ( 
             <React.Fragment>
+                <KYHArchieves userID={this.state.user._id} />
                 <div className='text-center heart-container'>
                     <i style={{fontSize: '60px'}} className='fas fa-heart text-danger'></i>
                 </div>

@@ -6,7 +6,6 @@ import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 import ComparisionRadar from './comparisionRadar';
 
