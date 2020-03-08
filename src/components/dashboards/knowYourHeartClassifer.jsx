@@ -38,22 +38,22 @@ class KnowYourHeartClassifier extends Component {
         if((data.bmi === 'Overweight' && data.exerciseFreq === '1') || (data.exerciseFreq === '1' && (parseInt(data.hdl) + parseInt(data.ldl)) > 200))
             prob += 4 + 4 * (prob / 10)
         else if(data.exerciseFreq === '1')
-            prob += 2 + 2 * (prob / 10)
+            prob += 3 + 3 * (prob / 10)
         
         if((parseInt(data.hdl) + parseInt(data.ldl) > 200 && data.age < 18))
             prob += 4 + 4 * (prob / 10)
 
         if(parseInt(data.hdl) + parseInt(data.ldl) > 240 && data.age > 18) {
-            prob += 0.4 + 0.4 * (prob / 10)
+            prob += 4.4 + 4.4 * (prob / 10)
             if(data.diet.charAt(1) === '1' && parseInt(data.ldl) > 100)
-                prob += 0.8 + 0.8 * (prob / 10)
+                prob += 2.2 + 2.2 * (prob / 10)
         }
 
         if(data.exerciseFreq === '2')
-            prob += 1 + 1 * (prob / 10)
+            prob += 1.8 + 1.8 * (prob / 10)
             
         if(data.heartDiseaseHistory === '2') 
-            prob += 2.1 + 2.1 * (prob / 10)
+            prob += 3 + 3 * (prob / 10)
 
         if(data.diabetic === '2') {
             prob += 2 + 2 * (prob / 10)
@@ -68,17 +68,21 @@ class KnowYourHeartClassifier extends Component {
         }
 
         if(data.alcohol === '2')
-            prob += 0.6 + 0.6 * (prob / 10)
+            prob += 0.9 + 0.9 * (prob / 10)
         else if (data.alcohol === '3')
-            prob += 1.2 + 1.2 * (prob / 10)
+            prob += 1.4 + 1.4 * (prob / 10)
 
         if(data.smoke === '2')
-            prob += 0.9 + 0.9 * (prob / 10)
+            prob += 2.4 + 2.4 * (prob / 10)
 
         if(data.diet.charAt(1) === '1') {
             prob += 1.2 + 1.2 * (prob / 10)
         }    
         
+        if(data.diet.charAt(2) === '1') {
+            prob += 0.8 + 0.8 * (prob / 10)
+        }    
+
         if(data.diet.charAt(0) === '1') {
             prob += 2 + 2 * (prob / 10)
             if(prob < 10) {
@@ -266,7 +270,7 @@ class KnowYourHeartClassifier extends Component {
                         <Col sm={12} lg={4}>{diseaseHistoryGraph}</Col>
                     </Row>
                 )
-            } else if (parseInt(data.ldl) + parseInt(data.hdl) > 240) {
+            } else if (parseInt(data.ldl) + parseInt(data.hdl) >= 240) {
                 analysisCharts.push(
                     <Row className='align-items-center mt-5'>
                         <Col sm={12} lg={4}><Pie data={data1} options={options1}></Pie></Col>
@@ -332,7 +336,7 @@ class KnowYourHeartClassifier extends Component {
                 contentLabel="Minimal Modal Example">
                 <ToastContainer autoClose={5000}/>
                 <button className="close" onClick={() => {this.handleCloseModal(); this.props.handleCloseReport();}}><i className="fas fa-times"></i></button>
-                {_.isEmpty(this.state.user) ? null:
+                {this.state.user === null ? null:
                     <React.Fragment>
                         <button className="download" onClick={this.handleDownload}><i className="fas fa-download"></i></button>
                         <button className="save" onClick={this.handleSave}><i className="fas fa-cloud-download-alt"></i></button>

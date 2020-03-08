@@ -24,7 +24,6 @@ class KYHArchieves extends Component {
                 })
                 this.setState({ kyh_archieves: res.data.items })
             } catch(ex) {
-                console.log(ex)
                 if(ex.response.status === 400 && ex.response.data) {
                     toast.error(ex.response.data.error)
                 }
@@ -49,18 +48,20 @@ class KYHArchieves extends Component {
     }
 
     render() { 
-        return ( 
-            <div className="dropdown float-left">
-                <button className="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
-                    Archieves
-                </button>
-                <div className="dropdown-menu" x-placement="bottom-start" style={{position: 'absolute', willChange: 'transform', top: '0px', left: '0px', transform: 'translate3d(0px, 38px, 0px)'}}>
-                    {this.state.kyh_archieves.map((item, index) => 
-                        <Link onClick={() => this.setCurrentKYH(item)} key={index} className="dropdown-item" to="#">{this.objectIDToTimestamp(item._id)} <br/><b>Score: {item.score}</b></Link>
-                    )}
-                </div>
-                {this.state.viewReport ? <KnowYourHeartClassifier data={this.state.data} user={null} handleCloseReport={this.handleCloseReport} /> : null}
-            </div>
+        return (
+            this.state.kyh_archieves.length > 0 ? 
+                <div className="dropdown float-left">
+                    <button className="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">
+                        Archieves
+                    </button>
+                    <div className="dropdown-menu" x-placement="bottom-start" style={{position: 'absolute', willChange: 'transform', top: '0px', left: '0px', transform: 'translate3d(0px, 38px, 0px)'}}>
+                        {this.state.kyh_archieves.map((item, index) => 
+                            <Link onClick={() => this.setCurrentKYH(item)} key={index} className="dropdown-item" to="#">{this.objectIDToTimestamp(item._id)} <br/><b>Score: {item.score}</b></Link>
+                        )}
+                    </div>
+                    {this.state.viewReport ? <KnowYourHeartClassifier data={this.state.data} user={null} handleCloseReport={this.handleCloseReport} /> : null}
+                </div> 
+                : null
         );
     }
 }
