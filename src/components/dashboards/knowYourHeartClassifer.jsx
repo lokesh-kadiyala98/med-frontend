@@ -6,9 +6,9 @@ import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
-import _ from 'lodash'
 
 import ComparisionRadar from './comparisionRadar';
+import ComparisionBar from './comparisionBar';
 
 class KnowYourHeartClassifier extends Component {
     state = { 
@@ -21,6 +21,8 @@ class KnowYourHeartClassifier extends Component {
 
     componentDidMount() {
         const { data, user } = this.props
+
+
 
         this.setState({ data, user }, () => {
             this.analyze()
@@ -93,7 +95,7 @@ class KnowYourHeartClassifier extends Component {
         return prob
     }
 
-    analyze = () => {
+    analyze = async () => {
         const data = {...this.state.data}  
         var score = 0
         
@@ -197,6 +199,27 @@ class KnowYourHeartClassifier extends Component {
                 <Col sm={12} lg={4} className="text-center mt-3">
                     <h4>Your Heart Score</h4>
                     <p>{score}</p>    
+                </Col>
+            </Row>
+        )
+
+        const {data: ageGrpAvg} = await axios.get('http://localhost:5000/kyh/get_ageGrp_average', {
+            params: {
+              ageGrp: 1,
+            }
+        })
+        const {data: usersAvg} = await axios.get('http://localhost:5000/kyh/get_users_average')
+
+        var label = 'Your Age Group(' + (ageGrpAvg.items[0]._id * 10 + 1) + '-' + (ageGrpAvg.items[0]._id * 10 + 10) + ')'
+        analysisCharts.push(
+            <Row className='align-items-center mt-5'>
+                <Col xl={12}>
+                    <ComparisionBar label={label} avgScore={ageGrpAvg.items[0].avgScore} userScore={score} />
+                    {/* <p className='align-right'>Contains {ageGrpAvg.items[0].count} samples</p> */}
+                </Col>
+                <Col xl={12}>
+                    <ComparisionBar label='All Users' avgScore={usersAvg.items[0].avgScore} userScore={score} />
+                    {/* <p className='align-right'>Contains {usersAvg.items[0].count} samples</p> */}
                 </Col>
             </Row>
         )
@@ -306,8 +329,8 @@ class KnowYourHeartClassifier extends Component {
         try {
             var res = await axios({
                 method: 'post',
-                url: 'http://localhost:5000/users/kyh_save_data',
-                data: {...this.state.data, userID: this.state.user._id, score: this.state.score}
+                url: 'http://localhost:5000/kyh/kyh_save_data',
+                data: {...this.state.data, ageGrp: parseInt(this.state.data.age/10), userID: this.state.user._id, score: this.state.score}
             })
             if(res.status === 200)
                 toast.success(res.data.message)
