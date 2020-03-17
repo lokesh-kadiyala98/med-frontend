@@ -5,7 +5,6 @@ import LinkBox from '../misc/linkBox';
 class Dashboards extends Component {
     state = {  }
     render() { 
-
         return ( 
             <section className="row">
                 <div className="col-sm-6 col-md-4 col-lg-3">
@@ -32,9 +31,9 @@ class Dashboards extends Component {
                     <NavLink to="/dashboards/salesForecast" >
                         <LinkBox 
                             body="Sales Dashboard" 
-                            fntClr='rgb(18, 96, 51)' 
-                            bgClr='rgb(46, 204, 113)' 
-                            icon={<i className="fas fa-notes-medical"></i>} 
+                            fntClr='rgb(60, 28, 74)' 
+                            bgClr='rgb(155, 89, 182)' 
+                            icon={<i class="fas fa-chart-line"></i>} 
                         />
                     </NavLink>
                 </div>

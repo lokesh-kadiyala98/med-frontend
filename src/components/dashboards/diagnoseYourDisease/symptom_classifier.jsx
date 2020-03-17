@@ -66,13 +66,14 @@ class SymptomClassifier extends Component {
 
         var results = await revivedClassifier.categorize(symptoms)
 
-        return <h1 className='mt-3'>{results.charAt(0).toUpperCase() + results.slice(1)}</h1>
+        return results.charAt(0).toUpperCase() + results.slice(1)
     }
 
     render() { 
         return ( 
             <div>
-                {this.state.predictedDisease}
+                <h1 className='mt-3'>{this.state.predictedDisease}</h1>
+
                 <div className="mt-5 symptomsContainer">
                     <div className='m-2 text-monospace larger-150'>Do you observe any of the below symptoms?</div>
                     {this.displayInputSymptoms(this.state.recommendedSymptoms)}

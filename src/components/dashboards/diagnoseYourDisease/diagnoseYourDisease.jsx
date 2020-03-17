@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import SymptomClassifier from './symptom_classifier';
 import SymptomsInput from './symptoms_input';
-import '../../config.json'
+import '../../../config.json'
 
 class DiagnoseYourDisease extends Component {
     state = {

@@ -8,7 +8,7 @@ import Logout from './components/logout';
 import Profile from './components/profile';
 import Home from './components/home';
 import Dashboards from './components/dashboards/dashboards';
-import DiagnoseYourDisease from './components/dashboards/diagnoseYourDisease';
+import DiagnoseYourDisease from './components/dashboards/diagnoseYourDisease/diagnoseYourDisease';
 import KnowYourHeart from './components/dashboards/knowYourHeart';
 import SalesForecast from './components/dashboards/sales/salesForecasting';
 

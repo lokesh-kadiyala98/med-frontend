@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import AutoSuggestWrapper from './../misc/autoSuggestWrapper';
+import AutoSuggestWrapper from '../../misc/autoSuggestWrapper';
 
 class SymptomsInput extends Component {
     state = { 

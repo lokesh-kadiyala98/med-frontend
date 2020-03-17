@@ -7,14 +7,14 @@ import '../resources/css/autosuggest.css';
 
 class AutoSuggestWrapper extends Component {
   state = { 
-    symptoms: [],
+    items: [],
     value: '',
     suggestions: []
   }
 
   componentDidUpdate(prevProps) {
     if(prevProps !== this.props) {
-      this.setState({ symptoms: this.props.items })
+      this.setState({ items: this.props.items })
     }
   }
 
@@ -31,7 +31,7 @@ class AutoSuggestWrapper extends Component {
     
       const regex = new RegExp('\\b' + escapedValue, 'i');
       
-      return this.state.symptoms.filter(symptom => regex.test(this.getSuggestionValue(symptom)));        
+      return this.state.items.filter(item => regex.test(this.getSuggestionValue(item)));        
   }
     
   getSuggestionValue = suggestion => suggestion.name
