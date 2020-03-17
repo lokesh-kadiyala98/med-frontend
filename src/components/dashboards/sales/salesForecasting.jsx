@@ -1,21 +1,25 @@
 import React, { Component } from 'react';
-import HoltWinters from './holtWinters';
+import axios from 'axios'
+
+import HoltWinters from './holtWinters'
 
 class SalesForecast extends Component {
-    state = {  }
+    state = { 
+        medicines: []
+    }
 
     async componentDidMount() {
         const {data} = await axios({
             method: 'get',
-            url: "http://localhost:5000/medicines/get_unique_medicines",
+            url: "http://localhost:5000/pharma/get_unique_medicines",
         })
                 
-        var symptomsObj = []
+        var medicinesObj = []
         data.forEach((item) => {
             var obj = { name: item }
-            symptomsObj.push(obj)
+            medicinesObj.push(obj)
         })
-        this.setState({symptoms: symptomsObj})
+        this.setState({medicines: medicinesObj})
     }
 
     render() { 
