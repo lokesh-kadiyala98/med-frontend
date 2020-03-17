@@ -10,12 +10,12 @@ import Home from './components/home';
 import Dashboards from './components/dashboards/dashboards';
 import DiagnoseYourDisease from './components/dashboards/diagnoseYourDisease';
 import KnowYourHeart from './components/dashboards/knowYourHeart';
+import SalesForecast from './components/dashboards/sales/salesForecasting';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 import './components/resources/css/style.css'
 import './components/resources/js/helperScript'
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 
 class App extends Component {
 
@@ -36,6 +36,7 @@ class App extends Component {
         <div className='container'>
           <Switch>
             <Route path="/dashboards/diagnoseYourDisease" component={DiagnoseYourDisease} />
+            <Route path="/dashboards/salesForecast" component={SalesForecast} />
             <Route path="/dashboards/knowYourHeart" component={KnowYourHeart} />
             <Route path="/logout" component={Logout} />
             <Route path="/login" component={RegisterLogin} />

@@ -28,6 +28,16 @@ class Dashboards extends Component {
                         />
                     </NavLink>
                 </div>
+                <div className="col-sm-6 col-md-4 col-lg-3">
+                    <NavLink to="/dashboards/salesForecast" >
+                        <LinkBox 
+                            body="Sales Dashboard" 
+                            fntClr='rgb(18, 96, 51)' 
+                            bgClr='rgb(46, 204, 113)' 
+                            icon={<i className="fas fa-notes-medical"></i>} 
+                        />
+                    </NavLink>
+                </div>
             </section>
         );
     }

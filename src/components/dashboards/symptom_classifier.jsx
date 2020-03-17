@@ -38,7 +38,6 @@ class SymptomClassifier extends Component {
         }
     }
 
-
     //renders all recommended items
     displayInputSymptoms = (symptoms) => {
         if(symptoms[0] !== '' && symptoms.length >= 1) {
