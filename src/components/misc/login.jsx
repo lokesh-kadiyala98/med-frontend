@@ -1,7 +1,9 @@
 import React from 'react';
-import Form from './form/form';
 import Joi from 'joi-browser';
 import axios from 'axios';
+
+import Form from './form/form';
+import config from '../../config.json'
 
 class Login extends Form {
 
@@ -28,7 +30,7 @@ class Login extends Form {
         try {
             var res = await axios({
                 method: 'post',
-                url: 'http://localhost:5000/users/user_login',
+                url: config.apiEndpoint + '/users/user_login',
                 data: this.state.data
             })
             localStorage.setItem('token', res.data.token)

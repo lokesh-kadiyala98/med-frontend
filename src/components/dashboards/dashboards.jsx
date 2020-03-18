@@ -33,7 +33,7 @@ class Dashboards extends Component {
                             body="Sales Dashboard" 
                             fntClr='rgb(60, 28, 74)' 
                             bgClr='rgb(155, 89, 182)' 
-                            icon={<i class="fas fa-chart-line"></i>} 
+                            icon={<i className="fas fa-chart-line"></i>} 
                         />
                     </NavLink>
                 </div>

@@ -3,6 +3,7 @@ import Joi from 'joi-browser';
 import axios from 'axios';
 
 import Form from './form/form';
+import config from '../../config.json'
 
 class Register extends Form {
 
@@ -41,7 +42,7 @@ class Register extends Form {
         try {
             var res = await axios({
                 method: 'post',
-                url: 'http://localhost:5000/users/user_register',
+                url: config.apiEndpoint + '/users/user_register',
                 data: this.state.data
             })
             localStorage.setItem('token', res.data.token)

@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 
 import KnowYourHeartClassifier from './knowYourHeartClassifer';
+import config from '../../config.json'
 
 class KYHArchieves extends Component {
     state = { 
@@ -19,7 +20,7 @@ class KYHArchieves extends Component {
             try {
                 var res = await axios({
                     method: 'post',
-                    url: 'http://localhost:5000/kyh/get_user_kyh_data',
+                    url:  config.apiEndpoint + '/kyh/get_user_kyh_data',
                     data: {userID: this.props.userID}
                 })
                 this.setState({ kyh_archieves: res.data.items })

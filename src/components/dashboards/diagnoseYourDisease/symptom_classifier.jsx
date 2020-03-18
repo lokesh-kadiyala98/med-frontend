@@ -17,7 +17,7 @@ class SymptomClassifier extends Component {
         ]
     }
 
-    async componentDidUpdate(prevProps, prevState) {
+    async componentDidUpdate(prevProps) {
         if(prevProps.symptoms !== this.props.symptoms){
             if(this.props.symptoms.split(', ').length > 2) {
                 var predictedDisease = await this.predict(this.props.symptoms)

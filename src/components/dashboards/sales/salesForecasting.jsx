@@ -1,30 +1,30 @@
 import React, { Component } from 'react';
 import axios from 'axios'
 
-import HoltWinters from './holtWinters'
+import config from '../../../config.json'
+import MedicinesInput from './medicineInput'
+import ForecastGraphs from './forecastGraphs'
 
 class SalesForecast extends Component {
     state = { 
-        medicines: []
+        data: {
+            medicineName: '',
+        }
     }
 
-    async componentDidMount() {
-        const {data} = await axios({
-            method: 'get',
-            url: "http://localhost:5000/pharma/get_unique_medicines",
-        })
-                
-        var medicinesObj = []
-        data.forEach((item) => {
-            var obj = { name: item }
-            medicinesObj.push(obj)
-        })
-        this.setState({medicines: medicinesObj})
+    handleSubmit = (value) => {
+        var data = {...this.state.data}
+        data.medicineName = value
+
+        this.setState({ data })
     }
 
     render() { 
         return ( 
-            <h1>Salesforecast</h1>
+            <React.Fragment>
+                <MedicinesInput onClick={this.handleSubmit} />
+                <ForecastGraphs medicineName={this.state.data.medicineName} />
+            </React.Fragment>
         );
     }
 }

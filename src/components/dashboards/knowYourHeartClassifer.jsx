@@ -9,6 +9,7 @@ import { toast, ToastContainer } from 'react-toastify';
 
 import ComparisionRadar from './comparisionRadar';
 import ComparisionBar from './comparisionBar';
+import config from '../../config.json'
 
 class KnowYourHeartClassifier extends Component {
     state = { 
@@ -21,8 +22,6 @@ class KnowYourHeartClassifier extends Component {
 
     componentDidMount() {
         const { data, user } = this.props
-
-
 
         this.setState({ data, user }, () => {
             this.analyze()
@@ -203,12 +202,12 @@ class KnowYourHeartClassifier extends Component {
             </Row>
         )
 
-        const {data: ageGrpAvg} = await axios.get('http://localhost:5000/kyh/get_ageGrp_average', {
+        const {data: ageGrpAvg} = await axios.get(config.apiEndpoint + '/kyh/get_ageGrp_average', {
             params: {
-              ageGrp: 1,
+              ageGrp: this.state.data.age / 10,
             }
         })
-        const {data: usersAvg} = await axios.get('http://localhost:5000/kyh/get_users_average')
+        const {data: usersAvg} = await axios.get(config.apiEndpoint + '/kyh/get_users_average')
 
         var label = 'Your Age Group(' + (ageGrpAvg.items[0]._id * 10 + 1) + '-' + (ageGrpAvg.items[0]._id * 10 + 10) + ')'
         analysisCharts.push(
@@ -329,7 +328,7 @@ class KnowYourHeartClassifier extends Component {
         try {
             var res = await axios({
                 method: 'post',
-                url: 'http://localhost:5000/kyh/kyh_save_data',
+                url: config.apiEndpoint + '/kyh/kyh_save_data',
                 data: {...this.state.data, ageGrp: parseInt(this.state.data.age/10), userID: this.state.user._id, score: this.state.score}
             })
             if(res.status === 200)

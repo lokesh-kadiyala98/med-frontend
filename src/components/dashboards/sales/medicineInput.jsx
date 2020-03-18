@@ -4,24 +4,26 @@ import axios from 'axios';
 import AutoSuggestWrapper from '../../misc/autoSuggestWrapper'
 import config from '../../../config.json'
 
-class SymptomsInput extends Component {
+class MedicinesInput extends Component {
     state = { 
-        symptoms: [],
+        //holds all distinct medicines in {name: medicine} format
+        medicines: [],
+        //
         value: '',
     }
 
     async componentDidMount() {
         const {data} = await axios({
             method: 'get',
-            url: config.apiEndpoint + "/disease_symptoms/get_unique_symptoms",
+            url: config.apiEndpoint + "/pharma/get_unique_medicines",
         })
                 
-        var symptomsObj = []
+        var medicines = []
         data.forEach((item) => {
             var obj = { name: item }
-            symptomsObj.push(obj)
+            medicines.push(obj)
         })
-        this.setState({symptoms: symptomsObj})
+        this.setState({medicines})
     }
 
     onChange = (value) => {
@@ -29,16 +31,16 @@ class SymptomsInput extends Component {
     }
 
     render() { 
-        const { symptoms } = this.state;
+        const { medicines } = this.state;
         return (  
             <div className="input-group mb-3">
-                <AutoSuggestWrapper items={symptoms} onChange={this.onChange} />
+                <AutoSuggestWrapper items={medicines} onChange={this.onChange} />
                 <div className="input-group-append">
-                    <button className="btn btn-outline-secondary" onClick={() => this.props.onClick(this.state.value)} type="button">Diagnose</button>
+                    <button className="btn btn-outline-secondary" onClick={() => this.props.onClick(this.state.value)} type="button">Forecast</button>
                 </div>
             </div>
         );
     }
 }
  
-export default SymptomsInput;
+export default MedicinesInput;
