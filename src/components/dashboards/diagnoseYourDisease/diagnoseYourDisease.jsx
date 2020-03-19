@@ -70,7 +70,7 @@ class DiagnoseYourDisease extends Component {
         return ( 
             <section>
                 <SymptomsInput onClick={(value) => this.handleSubmit(value)} />
-                <div className="mt-5 symptomsContainer">
+                <div className="mt-5 capsules">
                     {this.displayInputSymptoms(this.state.data.inputSymptoms)}
                 </div>
                 <div>

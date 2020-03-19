@@ -12,24 +12,29 @@ class ForecastGraphs extends Component {
         lineData: {
             labels: [],
             datasets: []
-        }
+        },
+        predictionLength: 4,
     }
 
     async componentDidUpdate(prevProps) {
-        if(prevProps.medicineName !== this.props.medicineName) {
+        const { medicineName } = this.props
+
+        if(prevProps.medicineName !== medicineName) {
             var medicineNames = [...this.state.medicineNames]
-            medicineNames.push(this.props.medicineName)
+            medicineNames.push(medicineName)
             this.setState({ medicineNames })
             
             const { data } = await axios.get(config.apiEndpoint + '/pharma/get_timeseries_data', {
                 params: {
-                    medicineName: this.props.medicineName
+                    medicineName: medicineName
                 }
             })
+
             var dataset = []
-            var predictionLength = 4
-            var months = {"01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr", "05": "May", "06": "June", "07": "July", "08": "Aug", "09": "Sept", "10": "Oct", "11": "Nov", "12": "Dec"}
+            const months = {"01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr", "05": "May", "06": "June", "07": "July", "08": "Aug", "09": "Sept", "10": "Oct", "11": "Nov", "12": "Dec"}
+            const colors = [{faded: 'rgba(253, 121, 168, 0.2)', unfaded: 'rgba(253, 121, 168, 1.0)'},{faded: 'rgba(253, 203, 110, 0.2)', unfaded: 'rgba(253, 203, 110, 1.0)'},{faded: 'rgba(9, 132, 227, 0.2)', unfaded: 'rgba(9, 132, 227, 1.0)'},{faded: 'rgba(108, 92, 231, 0.2)', unfaded: 'rgba(108, 92, 231, 1.0)'}]
             var lineData = {...this.state.lineData}
+            
             lineData.labels = []
             data.forEach((item, key) => {
                 lineData.labels.push(months[item.month] + '-' + item.year.substr(2, 4))
@@ -41,21 +46,21 @@ class ForecastGraphs extends Component {
             lineData.labels.push("Mar-18")
             lineData.labels.push("Apr-18")
             
-            const holtWintersResult = HoltWinters(dataset, predictionLength)
+            const holtWintersResult = HoltWinters(dataset, this.state.predictionLength)
             var temp = {
-                label: this.props.medicineName,
+                label: medicineName,
                 fill: false,
                 lineTension: 0.1,
-                backgroundColor: 'rgba(75,192,192,0.4)',
-                borderColor: 'rgba(75,192,192,1)',
+                backgroundColor: colors[this.state.medicineNames.length - 1].faded,
+                borderColor: colors[this.state.medicineNames.length - 1].unfaded,
                 borderCapStyle: 'butt',
                 borderJoinStyle: 'miter',
-                pointBorderColor: 'rgba(75,192,192,1)',
+                pointBorderColor: colors[this.state.medicineNames.length - 1].unfaded,
                 pointBackgroundColor: '#fff',
                 pointBorderWidth: 1,
                 pointHoverRadius: 5,
-                pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-                pointHoverBorderColor: 'rgba(220,220,220,1)',
+                pointHoverBackgroundColor: colors[this.state.medicineNames.length - 1].unfaded,
+                pointHoverBorderColor: 'rgba(220, 220, 220, 1)',
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
@@ -65,6 +70,14 @@ class ForecastGraphs extends Component {
             
             this.setState({ lineData, showGraph: true })
         }
+    }
+
+    handleRemoveMedicine = (index) => {
+        var medicineNames = [...this.state.medicineNames]
+        var lineData = {...this.state.lineData}
+        medicineNames.splice(index, 1)
+        lineData.datasets.splice(index, 1)
+        this.setState({ lineData, medicineNames })
     }
     
     render() { 
@@ -93,10 +106,17 @@ class ForecastGraphs extends Component {
         //       }
         //     ]
         // }
-        const { showGraph, lineData } = this.state
+        const { showGraph, lineData, medicineNames } = this.state
         return ( 
             <React.Fragment>
                 {showGraph && <Line data={lineData} />}
+                <div className="mt-5 capsules">
+                    {medicineNames.map((item, index) => 
+                        <li className="delete" key={index} onClick={() => this.handleRemoveMedicine(index)}>
+                            {item.charAt(0).toUpperCase() + item.slice(1)}
+                        </li>
+                    )}
+                </div>
             </React.Fragment>
         );
     }

@@ -74,7 +74,7 @@ class SymptomClassifier extends Component {
             <div>
                 <h1 className='mt-3'>{this.state.predictedDisease}</h1>
 
-                <div className="mt-5 symptomsContainer">
+                <div className="mt-5 capsules">
                     <div className='m-2 text-monospace larger-150'>Do you observe any of the below symptoms?</div>
                     {this.displayInputSymptoms(this.state.recommendedSymptoms)}
                 </div>
