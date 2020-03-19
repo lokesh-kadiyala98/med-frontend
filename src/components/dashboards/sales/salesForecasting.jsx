@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import axios from 'axios'
+// import axios from 'axios'
 
-import config from '../../../config.json'
+// import config from '../../../config.json'
 import MedicinesInput from './medicineInput'
 import ForecastGraphs from './forecastGraphs'
 

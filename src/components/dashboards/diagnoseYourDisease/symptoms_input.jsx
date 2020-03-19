@@ -32,7 +32,7 @@ class SymptomsInput extends Component {
         const { symptoms } = this.state;
         return (  
             <div className="input-group mb-3">
-                <AutoSuggestWrapper items={symptoms} onChange={this.onChange} />
+                <AutoSuggestWrapper items={symptoms} placeholder='Enter Symptom...' onChange={this.onChange} />
                 <div className="input-group-append">
                     <button className="btn btn-outline-secondary" onClick={() => this.props.onClick(this.state.value)} type="button">Diagnose</button>
                 </div>

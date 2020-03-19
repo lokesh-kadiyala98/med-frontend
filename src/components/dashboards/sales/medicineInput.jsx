@@ -34,7 +34,7 @@ class MedicinesInput extends Component {
         const { medicines } = this.state;
         return (  
             <div className="input-group mb-3">
-                <AutoSuggestWrapper items={medicines} onChange={this.onChange} />
+                <AutoSuggestWrapper items={medicines} placeholder='Enter Medicine...' onChange={this.onChange} />
                 <div className="input-group-append">
                     <button className="btn btn-outline-secondary" onClick={() => this.props.onClick(this.state.value)} type="button">Forecast</button>
                 </div>

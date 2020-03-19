@@ -80,7 +80,7 @@ class AutoSuggestWrapper extends Component {
   render() { 
     const { value, suggestions } = this.state
     const inputProps = {
-      placeholder: "Enter Symptoms...",
+      placeholder: this.props.placeholder,
       value,
       onChange: this.onChange
     }
