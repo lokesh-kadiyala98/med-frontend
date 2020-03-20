@@ -12,7 +12,7 @@ li {
     list-style-type: none;
     padding: 5px 15px;
     padding-bottom: 8px;
-    border-radius: 15%;
+    border-radius: 25px;
     display: inline-block;
     margin: 3px 3px;
     cursor: pointer;
@@ -20,12 +20,12 @@ li {
 }
 
 .delete {
-    border: 1px solid #d35400;
-    color: #d35400;
+    border: 1px solid #dc3545;
+    color: #dc3545;
 }
 
 .delete:hover{
-    background-color: #d35400;
+    background-color: #dc3545;
     color: white;
 }
 
