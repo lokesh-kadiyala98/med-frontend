@@ -4,25 +4,27 @@ import axios from 'axios'
 
 import config from '../../../config.json'
 import HoltWinters from './holtWinters';
+import Loading from '../../misc/loading';
 
 class ForecastGraphs extends Component {
     state = { 
         medicineNames: [],
-        showGraph: false,
+        loading: true,
         lineData: {
             labels: [],
             datasets: []
         },
         predictionLength: 4,
+        errors: {}
     }
 
     async componentDidUpdate(prevProps) {
         const { medicineName } = this.props
-
+        
         if(prevProps.medicineName !== medicineName) {
             var medicineNames = [...this.state.medicineNames]
             medicineNames.push(medicineName)
-            this.setState({ medicineNames })
+            this.setState({ medicineNames, loading: true })
             
             const { data } = await axios.get(config.apiEndpoint + '/pharma/get_timeseries_data', {
                 params: {
@@ -68,7 +70,7 @@ class ForecastGraphs extends Component {
             }
             lineData.datasets.push(temp)
             
-            this.setState({ lineData, showGraph: true })
+            this.setState({ lineData, loading: false })
         }
     }
 
@@ -106,10 +108,14 @@ class ForecastGraphs extends Component {
         //       }
         //     ]
         // }
-        const { showGraph, lineData, medicineNames } = this.state
+        const { lineData, medicineNames, loading } = this.state
+
+        if(loading)
+            return <Loading />
+
         return ( 
             <React.Fragment>
-                {showGraph && <Line data={lineData} />}
+                <Line data={lineData} />
                 <div className="mt-5 capsules">
                     {medicineNames.map((item, index) => 
                         <li className="delete" key={index} onClick={() => this.handleRemoveMedicine(index)}>
