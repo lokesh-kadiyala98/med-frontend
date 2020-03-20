@@ -9,7 +9,7 @@ import Loading from '../../misc/loading'
 
 class ForecastGraphs extends Component {
     state = { 
-        medicineNames: ['a','b','c'],
+        medicineNames: [],
         loading: true,
         lineData: {
             labels: [],
@@ -83,7 +83,7 @@ class ForecastGraphs extends Component {
                     this.setState({ errors, loading: false })
                 }
             } else {
-                var errors = {...this.state.errors}
+                errors = {...this.state.errors}
                 errors.message = medicineName + ' already given'
                 this.setState({ errors, loading: false })
             }

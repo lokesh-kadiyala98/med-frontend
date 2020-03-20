@@ -29,10 +29,10 @@ class MedicinesInput extends Component {
             })
             this.setState({ medicineNames })
         } catch(ex) {
-            if(ex.response.status === 400 && ex.response.text)
-                toast.error(ex.response.text)
-            else if(!ex.status)
+            if(!ex.status)
                 toast.error('Opps!! Network issues')
+            else if(ex.response.status === 400 && ex.response.text)
+                toast.error(ex.response.text)
         }
     }
 
@@ -57,7 +57,7 @@ class MedicinesInput extends Component {
         return (  
             <React.Fragment>
                 <div className="input-group mb-3">
-                    <ToastContainer autoClose={5000}/>
+                    <ToastContainer autoClose={5000} />
                     <AutoSuggestWrapper items={medicineNames} placeholder='Enter Medicine...' onChange={this.onChange} />
                     <div className="input-group-append">
                         <button className="btn btn-outline-secondary" onClick={this.onClick} type="button">Forecast</button>
