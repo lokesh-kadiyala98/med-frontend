@@ -54,6 +54,7 @@ class SymptomsInput extends Component {
         return (  
             <React.Fragment>
                 <div className="input-group mb-3">
+                    <ToastContainer autoClose={5000} />
                     <AutoSuggestWrapper items={symptoms} placeholder='Enter Symptom...' onChange={this.onChange} />
                     <div className="input-group-append">
                         <button className="btn btn-outline-secondary" onClick={this.onClick} type="button">Diagnose</button>
