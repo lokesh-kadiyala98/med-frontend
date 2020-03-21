@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import _ from 'lodash'
 import axios from 'axios'
 import { toast, ToastContainer } from 'react-toastify'
+import _ from 'lodash'
 
-import AutoSuggestWrapper from '../../misc/autoSuggestWrapper'
-import config from '../../../config.json'
+import config from '../../config.json'
+import AutoSuggestWrapper from './autoSuggestWrapper';
 
-class SymptomsInput extends Component {
+class AutoSuggestInput extends Component {
     state = { 
-        symptoms: [],
+        items: [],
         value: '',
         errors: {}
     }
@@ -17,14 +17,14 @@ class SymptomsInput extends Component {
         try {
             const {data} = await axios({
                 method: 'get',
-                url: config.apiEndpoint + "/disease_symptoms/get_unique_symptoms",
+                url: config.apiEndpoint + this.props.url,
             })
-            var symptoms = []
+            var items = []
             data.forEach((item) => {
                 var obj = { name: item }
-                symptoms.push(obj)
+                items.push(obj)
             })
-            this.setState({ symptoms })
+            this.setState({ items })
         } catch(ex) {
             if(!ex.status)
                 toast.error('Opps!! Network issues')
@@ -39,8 +39,8 @@ class SymptomsInput extends Component {
 
     onClick = () => {
         var errors = {...this.state.errors}
-        const {symptoms, value} = this.state
-        if(symptoms.some(elem => elem.name === value)) {
+        const {items, value} = this.state
+        if(items.some(elem => elem.name === value)) {
             delete errors.message
             this.props.onClick(value)
         } else {
@@ -50,14 +50,14 @@ class SymptomsInput extends Component {
     }
 
     render() { 
-        const { symptoms, errors } = this.state;
+        const { items, errors } = this.state;
         return (  
             <React.Fragment>
                 <div className="input-group mb-3">
                     <ToastContainer autoClose={5000} />
-                    <AutoSuggestWrapper items={symptoms} placeholder='Enter Symptom...' onChange={this.onChange} />
+                    <AutoSuggestWrapper items={items} placeholder={this.props.placeholder} onChange={this.onChange} />
                     <div className="input-group-append">
-                        <button className="btn btn-outline-secondary" onClick={this.onClick} type="button">Diagnose</button>
+                        <button className="btn btn-outline-secondary" onClick={this.onClick} type="button">Submit</button>
                     </div>
                 </div>
                 {errors.message && <div className="alert alert-warning">{errors.message}</div>}
@@ -66,4 +66,4 @@ class SymptomsInput extends Component {
     }
 }
  
-export default SymptomsInput;
+export default AutoSuggestInput;

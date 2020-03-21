@@ -9,7 +9,7 @@ import Loading from '../../misc/loading'
 
 class ForecastGraphs extends Component {
     state = { 
-        medicineNames: [],
+        items: [],
         loading: true,
         lineData: {
             labels: [],
@@ -20,20 +20,21 @@ class ForecastGraphs extends Component {
     }
 
     async componentDidUpdate(prevProps) {
-        const { medicineName } = this.props
-        if(prevProps.medicineName !== medicineName) {
-            var medicineNames = [...this.state.medicineNames]
-            if(medicineNames.indexOf(medicineName) === -1) {
-                if(medicineNames.length < 4) {
-                    medicineNames.push(medicineName)
-                    this.setState({ medicineNames, loading: true })
+        const { toForecast, url } = this.props
+        if(prevProps.toForecast !== toForecast) {
+            var items = [...this.state.items]
+            if(items.indexOf(toForecast) === -1) {
+                if(items.length < 4) {
+                    items.push(toForecast)
+                    this.setState({ items, loading: true })
                     
                     try {
-                        const { data } = await axios.get(config.apiEndpoint + '/pharma/get_timeseries_data', {
+                        const { data } = await axios.get(config.apiEndpoint + url, {
                             params: {
-                                medicineName: medicineName
+                                toForecast: toForecast
                             }
                         })
+
                         var dataset = []
                         const months = {"01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr", "05": "May", "06": "June", "07": "July", "08": "Aug", "09": "Sept", "10": "Oct", "11": "Nov", "12": "Dec"}
                         const colors = [{faded: 'rgba(253, 121, 168, 0.2)', unfaded: 'rgba(253, 121, 168, 1.0)'},{faded: 'rgba(253, 203, 110, 0.2)', unfaded: 'rgba(253, 203, 110, 1.0)'},{faded: 'rgba(9, 132, 227, 0.2)', unfaded: 'rgba(9, 132, 227, 1.0)'},{faded: 'rgba(108, 92, 231, 0.2)', unfaded: 'rgba(108, 92, 231, 1.0)'}]
@@ -52,18 +53,18 @@ class ForecastGraphs extends Component {
                         
                         const holtWintersResult = HoltWinters(dataset, this.state.predictionLength)
                         var temp = {
-                            label: medicineName,
+                            label: toForecast,
                             fill: false,
                             lineTension: 0.1,
-                            backgroundColor: colors[this.state.medicineNames.length - 1].faded,
-                            borderColor: colors[this.state.medicineNames.length - 1].unfaded,
+                            backgroundColor: colors[this.state.items.length - 1].faded,
+                            borderColor: colors[this.state.items.length - 1].unfaded,
                             borderCapStyle: 'butt',
                             borderJoinStyle: 'miter',
-                            pointBorderColor: colors[this.state.medicineNames.length - 1].unfaded,
+                            pointBorderColor: colors[this.state.items.length - 1].unfaded,
                             pointBackgroundColor: '#fff',
                             pointBorderWidth: 1,
                             pointHoverRadius: 5,
-                            pointHoverBackgroundColor: colors[this.state.medicineNames.length - 1].unfaded,
+                            pointHoverBackgroundColor: colors[this.state.items.length - 1].unfaded,
                             pointHoverBorderColor: 'rgba(220, 220, 220, 1)',
                             pointHoverBorderWidth: 2,
                             pointRadius: 1,
@@ -79,32 +80,32 @@ class ForecastGraphs extends Component {
 
                 } else {
                     var errors = {...this.state.errors}
-                    errors.message = 'Cannot compare more than 4 medicines'
+                    errors.message = 'Cannot compare more than 4 items'
                     this.setState({ errors, loading: false })
                 }
             } else {
                 errors = {...this.state.errors}
-                errors.message = medicineName + ' already given'
+                errors.message = toForecast + ' already given'
                 this.setState({ errors, loading: false })
             }
         }
     }
 
     handleRemoveMedicine = (index) => {
-        var medicineNames = [...this.state.medicineNames]
+        var items = [...this.state.items]
         var lineData = {...this.state.lineData}
         var errors = {...this.state.errors}
         var loading = false
-        medicineNames.splice(index, 1)
+        items.splice(index, 1)
         lineData.datasets.splice(index, 1)
         delete errors.message
-        if(medicineNames.length === 0)
+        if(items.length === 0)
             loading = true
-        this.setState({ lineData, medicineNames, errors, loading })
+        this.setState({ lineData, items, errors, loading })
     }
     
     render() {
-        const { lineData, medicineNames, loading, errors } = this.state
+        const { lineData, items, loading, errors } = this.state
 
         if(loading)
             return <Loading />
@@ -114,7 +115,7 @@ class ForecastGraphs extends Component {
                 {errors.message && <div className="alert alert-warning">{errors.message}</div>}
                 <Line data={lineData} />
                 <div className="mt-5 capsules">
-                    {medicineNames.map((item, index) => 
+                    {items.map((item, index) => 
                         <li className="delete" key={index} onClick={() => this.handleRemoveMedicine(index)}>
                             {_.startCase(_.toLower(item))}
                         </li>

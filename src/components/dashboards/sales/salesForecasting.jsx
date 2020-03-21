@@ -1,9 +1,4 @@
 import React, { Component } from 'react';
-// import axios from 'axios'
-
-// import config from '../../../config.json'
-import MedicinesInput from './medicineInput'
-import ForecastGraphs from './forecastGraphs'
 
 class SalesForecast extends Component {
     state = { 
@@ -22,8 +17,6 @@ class SalesForecast extends Component {
     render() { 
         return ( 
             <React.Fragment>
-                <MedicinesInput onClick={this.handleSubmit} />
-                <ForecastGraphs medicineName={this.state.data.medicineName} />
             </React.Fragment>
         );
     }

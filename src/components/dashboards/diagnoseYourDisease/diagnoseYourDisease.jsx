@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import SymptomClassifier from './symptom_classifier';
-import SymptomsInput from './symptoms_input';
 import config from '../../../config.json'
+import AutoSuggestInput from '../../misc/autoSuggestInput';
 
 class DiagnoseYourDisease extends Component {
     state = {
@@ -69,7 +69,7 @@ class DiagnoseYourDisease extends Component {
     render() { 
         return ( 
             <section>
-                <SymptomsInput onClick={(value) => this.handleSubmit(value)} />
+                <AutoSuggestInput onClick={this.handleSubmit} url="/disease_symptoms/get_unique_symptoms" placeholder='Enter Symptom...' />
                 <div className="mt-5 capsules">
                     {this.displayInputSymptoms(this.state.data.inputSymptoms)}
                 </div>
