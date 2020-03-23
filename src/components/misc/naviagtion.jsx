@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 class NavBar extends Component {
 
@@ -15,25 +15,25 @@ class NavBar extends Component {
                     <div className="navbar-collapse collapse" id="navbarNav">
                         <ul className="navbar-nav">
                             <li className="nav-item">
-                                <Link className="nav-link" to="/">Home</Link>
+                                <NavLink exact className="nav-link" to="/">Home</NavLink>
                             </li>
                             <li className="nav-item">
-                                <Link className="nav-link" to="/dashboards">Dashboards</Link>
+                                <NavLink className="nav-link" to="/dashboards">Dashboards</NavLink>
                             </li>
                             {
                                 !user && 
                                 <li className="nav-item">
-                                    <Link className="nav-link" to="/login">Login</Link>
+                                    <NavLink className="nav-link" to="/login">Login</NavLink>
                                 </li>
                             }
                             {
                                 user &&
                                 <React.Fragment>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/profile">{user.name}</Link>
+                                        <NavLink className="nav-link" to="/profile">{user.name}</NavLink>
                                     </li>
                                     <li className="nav-item">
-                                        <Link className="nav-link" to="/logout">Logout</Link>
+                                        <NavLink className="nav-link" to="/logout">Logout</NavLink>
                                     </li>
                                 </React.Fragment>
                             }
