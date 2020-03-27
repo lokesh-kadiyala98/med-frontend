@@ -10,11 +10,13 @@ import Loading from '../../misc/loading'
 class ForecastGraphs extends Component {
     state = { 
         items: [],
+        holtWintersResults: [],
         loading: true,
         lineData: {
             labels: [],
             datasets: []
         },
+        insightBoards: [],
         predictionLength: 4,
         errors: {}
     }
@@ -28,6 +30,10 @@ class ForecastGraphs extends Component {
                     items.push(toForecast)
                     this.setState({ items, loading: true })
                     
+                    var holtWintersResults = [...this.state.holtWintersResults]
+                    let errors = {...this.state.errors}
+                    delete errors.message
+
                     try {
                         const { data } = await axios.get(config.apiEndpoint + url, {
                             params: {
@@ -45,13 +51,16 @@ class ForecastGraphs extends Component {
                             lineData.labels.push(months[item.month] + '-' + item.year.substr(2, 4))
                             dataset[key] = item.count
                         })
-    
-                        lineData.labels.push("Jan-18")
-                        lineData.labels.push("Feb-18")
-                        lineData.labels.push("Mar-18")
-                        lineData.labels.push("Apr-18")
+
+                        for (let index = 1; index <= this.state.predictionLength; index++) {
+                            if(index < 10)
+                                lineData.labels.push(months['0'+index] + '-18')
+                        }
                         
-                        const holtWintersResult = HoltWinters(dataset, this.state.predictionLength)
+                        const holtWintersResult = HoltWinters(dataset, 12)
+                        this.getInsights(toForecast, _.cloneDeep(holtWintersResult.augumentedDataset).splice(36, 12), _.cloneDeep(holtWintersResult.augumentedDataset).splice(48, 12), colors[this.state.items.length - 1])
+                        console.log(holtWintersResult)
+                        holtWintersResults.push(holtWintersResult.augumentedDataset)
                         var temp = {
                             label: toForecast,
                             fill: false,
@@ -69,11 +78,11 @@ class ForecastGraphs extends Component {
                             pointHoverBorderWidth: 2,
                             pointRadius: 1,
                             pointHitRadius: 10,
-                            data: holtWintersResult.augumentedDataset
+                            data: _.cloneDeep(holtWintersResult.augumentedDataset).splice(0, 48 + this.state.predictionLength + 1)
                         }
                         lineData.datasets.push(temp)
                         
-                        this.setState({ lineData, loading: false })
+                        this.setState({ holtWintersResults, lineData, errors, loading: false })
                     } catch(ex) {
                         console.log(ex)
                     }
@@ -91,21 +100,80 @@ class ForecastGraphs extends Component {
         }
     }
 
+    getInsights = (medicineName, prevSales, predSales, color) => {
+        var insightBoards = [...this.state.insightBoards]
+        const prevSalesSum = prevSales.reduce((a, b) => a + b)
+        const predSalesSum = predSales.reduce((a, b) => a + b)
+        var nextFiscalYearProfit = 100 - (predSalesSum / prevSalesSum) * 100
+        nextFiscalYearProfit = Math.round(nextFiscalYearProfit * 100) / 100
+
+        var largestElem = predSales[0]
+        var largestIndex = 0
+        for (let index = 1; index < predSales.length; index++) {
+            if (predSales[index] > largestElem) {
+                largestIndex = index
+                largestElem = predSales[index]
+            }
+        }
+
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sept", "Oct", "Nov", "Dec"]
+        const data = {
+            labels: months,
+            datasets: [
+                {
+                    label: '2018 - ' + medicineName + ' sales',
+                    fill: false,
+                    lineTension: 0.1,
+                    backgroundColor: 'rgba(75,192,192,0.4)',
+                    borderColor: 'rgba(75,192,192,1)',
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: 'rgba(75,192,192,1)',
+                    pointBackgroundColor: '#fff',
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                    pointHoverBorderColor: 'rgba(220,220,220,1)',
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data: predSales
+                }
+            ]
+        };
+        insightBoards.push(<div className="jumbotron jumbotron-fluid mt-2" style={{backgroundColor: color.faded, color: color.unfaded}}>
+            <div className="container">
+                <h1 className="display-4">{medicineName}</h1>
+                <p className="lead">Next Fiscal Year Profit: <b>{nextFiscalYearProfit + '% '}</b>{ nextFiscalYearProfit > 0 ? <i className="fas fa-arrow-up"></i> : <i className="fas fa-arrow-down"></i>}</p>
+                <p className="lead">Highest Sales Period: <b>{months[largestIndex]}</b></p>
+                <Line data={data} options={{scales:{yAxes:[{display:true,ticks:{beginAtZero:true}}]}}}/>
+            </div>
+        </div>)
+
+        this.setState({ insightBoards })
+    }
+
     handleRemoveMedicine = (index) => {
         var items = [...this.state.items]
+        var holtWintersResults = [...this.state.holtWintersResults]
+        var insightBoards = [...this.state.insightBoards]
         var lineData = {...this.state.lineData}
         var errors = {...this.state.errors}
         var loading = false
         items.splice(index, 1)
+        holtWintersResults.splice(index, 1)
         lineData.datasets.splice(index, 1)
+        insightBoards.splice(index, 1)
         delete errors.message
         if(items.length === 0)
             loading = true
-        this.setState({ lineData, items, errors, loading })
+        this.setState({ items, holtWintersResults, insightBoards, lineData, errors, loading })
     }
     
     render() {
-        const { lineData, items, loading, errors } = this.state
+        const { lineData, items, loading, errors, insightBoards } = this.state
 
         if(loading)
             return <Loading />
@@ -114,10 +182,17 @@ class ForecastGraphs extends Component {
             <React.Fragment>
                 {errors.message && <div className="alert alert-warning">{errors.message}</div>}
                 <Line data={lineData} />
-                <div className="mt-5 capsules">
+                <div className="mt-1 capsules">
                     {items.map((item, index) => 
                         <li className="delete" key={index} onClick={() => this.handleRemoveMedicine(index)}>
                             {_.startCase(_.toLower(item))}
+                        </li>
+                    )}
+                </div>
+                <div className="row">
+                    {insightBoards.map((item, index) => 
+                        <li key={index} className="col-sm-12 col-lg-6">
+                            {item}
                         </li>
                     )}
                 </div>

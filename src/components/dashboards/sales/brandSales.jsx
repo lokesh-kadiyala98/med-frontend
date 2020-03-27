@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import ForecastGraphs from './forecastGraphs'
 import AutoSuggestInput from '../../misc/autoSuggestInput';
-import { Link } from 'react-router-dom';
 
 class BrandSales extends Component {
     state = { 
@@ -21,9 +20,9 @@ class BrandSales extends Component {
     render() { 
         return ( 
             <React.Fragment>
-                <Link onClick={() => this.props.history.push('/dashboards/salesForecast')} className="btn--action mb-3">
+                <div onClick={() => this.props.history.push('/dashboards/salesForecast')} className="btn--action mb-3">
                     <span><i className="fas fa-arrow-left"></i></span>
-                </Link>
+                </div>
                 <AutoSuggestInput onClick={this.handleSubmit} url='/pharma/get_unique_brands' placeholder='Enter Brand...' />
                 <ForecastGraphs toForecast={this.state.data.brandName} url='/pharma/get_brand_timeseries_data' />
             </React.Fragment>

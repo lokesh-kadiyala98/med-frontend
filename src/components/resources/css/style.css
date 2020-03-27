@@ -279,7 +279,8 @@ label img {
     transform: scale(0.9);
 }
   
-.btn--action{
+.btn--action {
+    cursor: pointer;
     display: block;
     max-width: 50px;
     font-size: 2rem;
@@ -292,14 +293,14 @@ label img {
     background-color: #f6e58d;
 }
   
-.btn--action span{
+.btn--action span {
     display: inline-block;
     position: relative;
     left: 5px;
     transition: all .5s ease;
 }
   
-.btn--action:hover span{
+.btn--action:hover span {
     padding-left: 0.5rem; 
     transform: scale(1.1);
 }
