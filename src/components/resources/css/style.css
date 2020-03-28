@@ -3,6 +3,14 @@
     padding: 0;
 }
 
+a {
+    color: inherit;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
 ul {
     list-style-type: none;
 }
@@ -296,11 +304,30 @@ label img {
 .btn--action span {
     display: inline-block;
     position: relative;
-    left: 5px;
+    left: 10px;
     transition: all .5s ease;
 }
   
 .btn--action:hover span {
-    padding-left: 0.5rem; 
+    padding-right: 0.5rem; 
     transform: scale(1.1);
+}
+
+.forecast-options {
+    position: relative;
+    cursor: pointer;
+}
+
+.forecast-options i {
+    position: absolute;
+    font-size: 3rem;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+    right: 2%;
+    transition: all .5s ease;
+}
+
+.forecast-options:hover i {
+    right: 1%;
 }

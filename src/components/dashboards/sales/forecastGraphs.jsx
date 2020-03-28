@@ -143,40 +143,69 @@ class ForecastGraphs extends Component {
                 }
             ]
         };
-        const doughnutData = {
-            labels: [
-                'Dec - Feb',
-                'Mar - May',
-                'Jun - Sep',
-                'Oct - Nov'
-            ],
-            datasets: [{
-                data: [predSales[11] + predSales[0] + predSales[1], predSales[2] + predSales[3] + predSales[4], predSales[5] + predSales[6] + predSales[6], predSales[8] + predSales[9] + predSales[10]],
-                backgroundColor: [
-                    'rgba(112, 161, 255, 0.6)',
-                    'rgba(255, 99, 72, 0.6)',
-                    'rgba(255, 165, 2, 0.6)',
-                    'rgba(46, 213, 115, 0.6)'
-                ],
-                hoverBackgroundColor: [
-                    'rgba(112, 161, 255, 1.0)',
-                    'rgba(255, 99, 72, 1.0)',
-                    'rgba(255, 165, 2, 1.0)',
-                    'rgba(46, 213, 115, 1.0)'
-                ]
-            }]
-        };
         
-        insightBoards.push(<div className="jumbotron jumbotron-fluid mt-2" style={{backgroundColor: color.faded, color: color.unfaded}}>
-            <div className="container">
-                <h1 className="display-4">{medicineName}</h1>
-                <p className="lead">Next Fiscal Year Profit: <b>{nextFiscalYearProfit + '% '}</b>{ nextFiscalYearProfit > 0 ? <i className="fas fa-arrow-up"></i> : <i className="fas fa-arrow-down"></i>}</p>
-                <p className="lead">Highest Sales Period: <b>{months[largestIndex]}</b></p>
-                <Line data={data} options={{scales:{yAxes:[{display:true,ticks:{beginAtZero:true}}]}}}/>
-                <br />
-                <Doughnut data={doughnutData} />
-            </div>
-        </div>)
+        if (this.props.url === '/pharma/get_medicine_timeseries_data') {
+            const doughnutData = {
+                labels: ['Dec - Feb', 'Mar - May', 'Jun - Sep', 'Oct - Nov'],
+                datasets: [
+                    {
+                        data: [predSales[11] + predSales[0] + predSales[1], predSales[2] + predSales[3] + predSales[4], predSales[5] + predSales[6] + predSales[6], predSales[8] + predSales[9] + predSales[10]],
+                        backgroundColor: [
+                            'rgba(112, 161, 255, 0.6)',
+                            'rgba(255, 99, 72, 0.6)',
+                            'rgba(255, 165, 2, 0.6)',
+                            'rgba(46, 213, 115, 0.6)'
+                        ],
+                        hoverBackgroundColor: [
+                            'rgba(112, 161, 255, 1.0)',
+                            'rgba(255, 99, 72, 1.0)',
+                            'rgba(255, 165, 2, 1.0)',
+                            'rgba(46, 213, 115, 1.0)'
+                        ]
+                    }
+                ]
+            };
+            insightBoards.push(<div className="jumbotron jumbotron-fluid mt-2" style={{backgroundColor: color.faded, color: color.unfaded}}>
+                <div className="container">
+                    <h1 className="display-4">{medicineName}</h1>
+                    <p className="lead">Next Fiscal Year Profit: <b>{nextFiscalYearProfit + '% '}</b>{ nextFiscalYearProfit > 0 ? <i className="fas fa-arrow-up"></i> : <i className="fas fa-arrow-down"></i>}</p>
+                    <p className="lead">Highest Sales Period: <b>{months[largestIndex]}</b></p>
+                    <Line data={data} options={{scales:{yAxes:[{display:true,ticks:{beginAtZero:true}}]}}}/>
+                    <br />
+                    <Doughnut data={doughnutData} />
+                </div>
+            </div>)
+        } else {
+            const doughnutData = {
+                labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                datasets: [
+                    {
+                        data: [predSales[0] + predSales[1] + predSales[2], predSales[3] + predSales[4] + predSales[5], predSales[6] + predSales[7] + predSales[8], predSales[9] + predSales[10] + predSales[11]],
+                        backgroundColor: [
+                            'rgba(112, 161, 255, 0.6)',
+                            'rgba(255, 99, 72, 0.6)',
+                            'rgba(255, 165, 2, 0.6)',
+                            'rgba(46, 213, 115, 0.6)'
+                        ],
+                        hoverBackgroundColor: [
+                            'rgba(112, 161, 255, 1.0)',
+                            'rgba(255, 99, 72, 1.0)',
+                            'rgba(255, 165, 2, 1.0)',
+                            'rgba(46, 213, 115, 1.0)'
+                        ]
+                    }
+                ]
+            };
+            insightBoards.push(<div className="jumbotron jumbotron-fluid mt-2" style={{backgroundColor: color.faded, color: color.unfaded}}>
+                <div className="container">
+                    <h1 className="display-4">{medicineName}</h1>
+                    <p className="lead">Next Fiscal Year Profit: <b>{nextFiscalYearProfit + '% '}</b>{ nextFiscalYearProfit > 0 ? <i className="fas fa-arrow-up"></i> : <i className="fas fa-arrow-down"></i>}</p>
+                    <Line data={data} options={{scales:{yAxes:[{display:true,ticks:{beginAtZero:true}}]}}}/>
+                    <br />
+                    <Doughnut data={doughnutData} />
+                </div>
+            </div>)
+        }
 
         this.setState({ insightBoards })
     }
