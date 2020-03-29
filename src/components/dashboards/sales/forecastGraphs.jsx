@@ -59,7 +59,7 @@ class ForecastGraphs extends Component {
                         
                         const holtWintersResult = HoltWinters(dataset, 12)
                         this.getInsights(toForecast, _.cloneDeep(holtWintersResult.augumentedDataset).splice(36, 12), _.cloneDeep(holtWintersResult.augumentedDataset).splice(48, 12), colors[this.state.items.length - 1])
-                        console.log(holtWintersResult)
+
                         holtWintersResults.push(holtWintersResult.augumentedDataset)
                         var temp = {
                             label: toForecast,
@@ -104,7 +104,7 @@ class ForecastGraphs extends Component {
         var insightBoards = [...this.state.insightBoards]
         const prevSalesSum = prevSales.reduce((a, b) => a + b)
         const predSalesSum = predSales.reduce((a, b) => a + b)
-        var nextFiscalYearProfit = 100 - (predSalesSum / prevSalesSum) * 100
+        var nextFiscalYearProfit = 100 - (prevSalesSum / predSalesSum) * 100
         nextFiscalYearProfit = Math.round(nextFiscalYearProfit * 100) / 100
 
         var largestElem = predSales[0]
