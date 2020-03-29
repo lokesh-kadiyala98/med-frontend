@@ -95,8 +95,8 @@ class KnowYourHeart extends Form {
     async componentDidMount() {
         this.heartBeat()
         try {
-            const token = localStorage.getItem('token')
-            const {user} = jwtDecode(token)
+            const userToken = localStorage.getItem('user-token')
+            const {user} = jwtDecode(userToken)
             var data = {...this.state.data}
             data.gender = user.gender === 'male' ? 1 : user.gender === 'female' ? 0 : 2
             data.age = this.getAge(user.dob)

@@ -1,6 +1,7 @@
 import React from 'react';
 import Joi from 'joi-browser';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 import Form from './form/form';
 import config from '../../config.json'
@@ -30,11 +31,16 @@ class Login extends Form {
         try {
             var res = await axios({
                 method: 'post',
-                url: config.apiEndpoint + '/users/user_login',
+                url: config.apiEndpoint + this.props.apiRoute,
                 data: this.state.data
             })
-            localStorage.setItem('token', res.data.token)
-            window.location = '/'
+            if(this.props.apiRoute === '/users/user_login') {
+                localStorage.setItem('user-token', res.data.token)
+                window.location = '/'
+            } else {
+                localStorage.setItem('admin-token', res.data.token)
+                toast.success('Logged in as Admin')
+            }
         } catch (ex) {
             if(ex.response.status === 400 && ex.response.data) {
                 const errors = {...this.state.errors}

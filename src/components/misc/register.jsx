@@ -45,7 +45,7 @@ class Register extends Form {
                 url: config.apiEndpoint + '/users/user_register',
                 data: this.state.data
             })
-            localStorage.setItem('token', res.data.token)
+            localStorage.setItem('user-token', res.data.token)
             window.location = '/'
         } catch (ex) {
             if(ex.response.status === 400 && ex.response.data) {

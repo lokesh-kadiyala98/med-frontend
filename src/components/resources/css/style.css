@@ -19,6 +19,15 @@ li {
     list-style: none;
 }
 
+.center {
+    text-align: center;
+}
+
+.center .border {
+    padding: 10px;
+    display: inline-block;
+}
+
 .capsules li{
     list-style-type: none;
     padding: 5px 15px;

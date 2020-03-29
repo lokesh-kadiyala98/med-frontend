@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom'
 import LinkBar from '../../misc/linkBar';
 
 class SalesForecast extends Component {

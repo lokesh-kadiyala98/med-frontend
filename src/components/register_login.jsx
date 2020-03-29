@@ -11,8 +11,8 @@ class RegisterLogin extends Component {
         return ( 
             <section className="container">
                 <div className="row">
-                    <Register history={this.props.history} />
-                    <Login history={this.props.history} />
+                    <Register />
+                    <Login apiRoute='/users/user_login' />
                 </div>
             </section>
         );
