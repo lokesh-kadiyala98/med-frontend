@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 
 const LinkBar = ({ to, backgroundColor, color, header }) => {
-    console.log(backgroundColor)
     return ( 
         <Link to={to} style={{ textDecoration: 'none' }}>
             <div className='p-4 mb-3 forecast-options' style={{backgroundColor: backgroundColor, color: color}}>

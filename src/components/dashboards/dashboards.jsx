@@ -65,7 +65,7 @@ class Dashboards extends Component {
                     </div>
                 }
                 <div className="col-sm-6 col-md-4 col-lg-3 mt-3">
-                    <NavLink to="/dashboards/coronaStats" >
+                    <NavLink to="/dashboards/corona/india" >
                         <LinkBox 
                             body="Corona Statistics" 
                             fntClr='rgba(12, 36, 97, 1.0)' 
