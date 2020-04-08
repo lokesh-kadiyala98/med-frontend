@@ -22,7 +22,7 @@ class Dashboards extends Component {
     render() { 
         return ( 
             <section className="row">
-                <div className="col-sm-6 col-md-4 col-lg-3">
+                <div className="col-sm-6 col-md-4 col-lg-3 mt-3">
                     <NavLink to="/dashboards/knowYourHeart" >
                         <LinkBox 
                             body="Know Your Heart" 
@@ -32,10 +32,10 @@ class Dashboards extends Component {
                         />
                     </NavLink>
                 </div>
-                <div className="col-sm-6 col-md-4 col-lg-3">
+                <div className="col-sm-6 col-md-4 col-lg-3 mt-3">
                     <NavLink to="/dashboards/diagnoseYourDisease" >
                         <LinkBox 
-                            body="Diagnose Your Disease" 
+                            body="Diagnose Disease" 
                             fntClr='rgb(18, 96, 51)' 
                             bgClr='rgb(46, 204, 113)' 
                             icon={<i className="fas fa-notes-medical"></i>} 
@@ -43,7 +43,7 @@ class Dashboards extends Component {
                     </NavLink>
                 </div>
                 {this.state.admin ?
-                    <div className="col-sm-6 col-md-4 col-lg-3">
+                    <div className="col-sm-6 col-md-4 col-lg-3 mt-3">
                         <NavLink to="/dashboards/salesForecast" >
                             <LinkBox 
                                 body="Sales Dashboard" 
@@ -54,7 +54,7 @@ class Dashboards extends Component {
                             />
                         </NavLink>
                     </div> :
-                    <div className="col-sm-6 col-md-4 col-lg-3" onClick={() => {this.setState({ showModal:true })}}>
+                    <div className="col-sm-6 col-md-4 col-lg-3 mt-3" onClick={() => {this.setState({ showModal:true })}}>
                         <LinkBox 
                             body="Sales Dashboard" 
                             fntClr='rgb(60, 28, 74)' 
@@ -64,6 +64,16 @@ class Dashboards extends Component {
                         />
                     </div>
                 }
+                <div className="col-sm-6 col-md-4 col-lg-3 mt-3">
+                    <NavLink to="/dashboards/coronaStats" >
+                        <LinkBox 
+                            body="Corona Statistics" 
+                            fntClr='rgba(12, 36, 97, 1.0)' 
+                            bgClr='rgba(74, 105, 189, 1.0)' 
+                            icon={<i className="fas fa-virus"></i>}
+                        />
+                    </NavLink>
+                </div>
                 <ReactModal id="user-report"
                     ariaHideApp={false}
                     isOpen={this.state.showModal}
