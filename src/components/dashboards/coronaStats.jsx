@@ -36,10 +36,10 @@ class CoronaStats extends Component {
             datasets: [
               {
                 label: 'Daily New Cases',
-                backgroundColor: 'rgba(253, 121, 168, 0.2)',
+                backgroundColor: 'rgba(253, 121, 168, 0.4)',
                 borderColor: 'rgba(253, 121, 168, 1)',
                 borderWidth: 1,
-                hoverBackgroundColor: 'rgba(253, 121, 168, 0.2)',
+                hoverBackgroundColor: 'rgba(253, 121, 168, 0.7)',
                 hoverBorderColor: 'rgba(253, 121, 168, 1)',
                 data: []
               }
@@ -59,6 +59,7 @@ class CoronaStats extends Component {
               }
             ]
         }, 
+        totalRecovered: 0,
         deathCasesData: {
             labels: [],
             datasets: [
@@ -80,15 +81,15 @@ class CoronaStats extends Component {
               }
             ]
         },
-        dailyNewDeaths: {
+        dailyNewDeathsData: {
             labels: [],
             datasets: [
               {
                 label: 'Daily New Deaths',
-                backgroundColor: 'rgba(253, 203, 110, 0.2)',
+                backgroundColor: 'rgba(253, 203, 110, 0.4)',
                 borderColor: 'rgba(253, 203, 110, 1)',
                 borderWidth: 1,
-                hoverBackgroundColor: 'rgba(253, 203, 110, 0.2)',
+                hoverBackgroundColor: 'rgba(253, 203, 110, 0.7)',
                 hoverBorderColor: 'rgba(253, 203, 110, 1)',
                 data: []
               }
@@ -105,7 +106,8 @@ class CoronaStats extends Component {
         var dailyNewCasesData = {...this.state.dailyNewCasesData}
         var recoveredCasesData = {...this.state.recoveredCasesData}
         var deathCasesData = {...this.state.deathCasesData}
-        var dailyNewDeaths = {...this.state.dailyNewDeaths}
+        var dailyNewDeathsData = {...this.state.dailyNewDeathsData}
+        var totalRecovered = 0
 
         try {
             const { data } = await axios.get(config.apiEndpoint + '/corona_stats/get_corona_data')
@@ -119,19 +121,20 @@ class CoronaStats extends Component {
                 dailyNewCasesData.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
                 if(index === 0) {
                     dailyNewCasesData.datasets[0].data.push(items[index].totalCases)
-                    dailyNewDeaths.datasets[0].data.push(items[index].totalDeaths)
+                    dailyNewDeathsData.datasets[0].data.push(items[index].totalDeaths)
                 } else {
                     dailyNewCasesData.datasets[0].data.push(items[index].totalCases - items[index - 1].totalCases)
-                    dailyNewDeaths.datasets[0].data.push(items[index].totalDeaths - items[index - 1].totalDeaths)
+                    dailyNewDeathsData.datasets[0].data.push(items[index].totalDeaths - items[index - 1].totalDeaths)
                 }
 
                 recoveredCasesData.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
                 recoveredCasesData.datasets[0].data.push(items[index].recoveredOnDay)
+                totalRecovered += items[index].recoveredOnDay
 
                 deathCasesData.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
                 deathCasesData.datasets[0].data.push(items[index].totalDeaths)
 
-                dailyNewDeaths.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
+                dailyNewDeathsData.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
             }
 
         } catch(ex) {
@@ -142,24 +145,57 @@ class CoronaStats extends Component {
             }
         }
 
-        this.setState({ lastUpdated: formattedDate })
+        this.setState({ lastUpdated: formattedDate, totalCasesData, dailyNewCasesData, recoveredCasesData, totalRecovered, deathCasesData, dailyNewDeathsData})
     }
 
     render() { 
-        const {lastUpdated, totalCasesData, dailyNewCasesData, recoveredCasesData, deathCasesData, dailyNewDeaths} = this.state
+        const {lastUpdated, totalCasesData, dailyNewCasesData, recoveredCasesData, totalRecovered, deathCasesData, dailyNewDeathsData} = this.state
+
+        const totalDeathCases = deathCasesData.datasets[0].data[deathCasesData.datasets[0].data.length - 1]
+        const casesWithOutcome = totalDeathCases + totalRecovered
+
+        const totalDeathCasesPercentage = Math.floor(totalDeathCases / casesWithOutcome * 100)
+        const totalRecoveredCasesPercentage = Math.ceil(totalRecovered / casesWithOutcome * 100)
+
         const options = {
             tooltips: {
                 mode: 'index', 
                 intersect: false,
                 yAlign: 'bottom'
+            },
+            scales: {
+                yAxes: [{
+                    gridLines: {
+                        drawBorder: false,
+                    }
+                }]
             }
         }
-        return ( 
+        return (
             <div className='text-center'>
                 <ToastContainer autoClose={5000}/>
                 <h1 className='mb-0 text-secondary'>Corona Statistics India <img src={require('../resources/img/ind-flag.gif')} alt='INDIA flag' width="60" border="1 px solid #aaa"></img></h1>
                 <p className='text-muted'>Last updated: {lastUpdated}</p>
                 
+                <div className='bg-light p-5'>
+                    <h2 className="mb-0" style={{color: '#555'}}>COVID-19 Cases:</h2>
+                    <h1 className='font-weight-bold mb-3' style={{color: '#aaa',}}>{totalCasesData.datasets[0].data[totalCasesData.datasets[0].data.length - 1]}</h1>
+                    
+                    <h2 className="mb-0" style={{color: '#555'}}>Recovered:</h2>
+                    <div className='mb-3'>
+                        <span className='font-weight-bold h1' style={{color: '#8ACA2B',}}>{totalRecovered}
+                            <span className="h5"> ({totalRecoveredCasesPercentage}%)</span>
+                        </span>
+                    </div>
+                    
+                    <h2 className="mb-0" style={{color: '#555'}}>Deaths:</h2>
+                    <div className='mb-3'>
+                        <span className='font-weight-bold h1' style={{color: '#696969',}}>{totalDeathCases}
+                            <span className="h5"> ({totalDeathCasesPercentage}%)</span>
+                        </span>
+                    </div>
+                </div>
+
                 <Row>
                     <Col className="p-5" lg={12}><Line data={totalCasesData} options={options}/></Col>
                     <Col className="p-5" lg={12}><Bar data={dailyNewCasesData}/></Col>
@@ -171,7 +207,7 @@ class CoronaStats extends Component {
                 
                 <Row>
                     <Col className="p-5" lg={12}><Line data={deathCasesData} options={options}/></Col>
-                    <Col className="p-5" lg={12}><Bar data={dailyNewDeaths}/></Col>
+                    <Col className="p-5" lg={12}><Bar data={dailyNewDeathsData}/></Col>
                 </Row>
             </div>
          );
