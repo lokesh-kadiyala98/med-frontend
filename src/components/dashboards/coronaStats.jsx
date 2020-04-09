@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Line } from 'react-chartjs-2';
+import SimpleLinearRegression from 'ml-regression-simple-linear';
+import { toast, ToastContainer } from 'react-toastify'
+import { Line, Bar } from 'react-chartjs-2'
+import { Row, Col } from 'react-bootstrap'
 import axios from 'axios'
-import { toast } from 'react-toastify';
 
 import config from '../../config.json'
 
@@ -13,40 +15,46 @@ class CoronaStats extends Component {
             datasets: [
               {
                 label: 'Total cases',
-                backgroundColor: 'rgba(75,192,192,0.4)',
-                borderColor: 'rgba(75,192,192,1)',
+                backgroundColor: 'rgba(253, 121, 168, 0.2)',
+                borderColor: 'rgba(253, 121, 168, 1)',
                 fill: false,
                 lineTension: 0,
-                pointBorderColor: 'rgba(75,192,192,1)',
+                pointBorderColor: 'rgba(253, 121, 168, 1)',
                 pointBackgroundColor: '#fff',
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-                pointHoverBorderColor: 'rgba(220,220,220,1)',
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
+                pointBorderWidth: 5,
                 pointHitRadius: 10,
+                pointHoverBackgroundColor: 'rgba(253, 121, 168, 0.2)',
+                pointHoverBorderColor: 'rgba(253, 121, 168, 0.2)',
+                pointHoverBorderWidth: 10,
+                pointRadius: 1,
                 data: []
               }
             ]
         },
+        dailyNewCasesData: {
+            labels: [],
+            datasets: [
+              {
+                label: 'Daily New Cases',
+                backgroundColor: 'rgba(253, 121, 168, 0.2)',
+                borderColor: 'rgba(253, 121, 168, 1)',
+                borderWidth: 1,
+                hoverBackgroundColor: 'rgba(253, 121, 168, 0.2)',
+                hoverBorderColor: 'rgba(253, 121, 168, 1)',
+                data: []
+              }
+            ]
+        }, 
         recoveredCasesData: {
             labels: [],
             datasets: [
               {
-                label: 'Recovered on particular Day',
-                backgroundColor: 'rgba(75,192,192,0.4)',
-                borderColor: 'rgba(75,192,192,1)',
-                fill: false,
-                lineTension: 0.2,
-                pointBorderColor: 'rgba(75,192,192,1)',
-                pointBackgroundColor: '#fff',
-                pointBorderWidth: 5,
-                pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-                pointHoverBorderColor: 'rgba(75,192,192,0.4)',
-                pointHoverBorderWidth: 10,
-                pointRadius: 1,
-                pointHitRadius: 10,
+                label: 'Daily Recovered',
+                backgroundColor: 'rgba(9, 132, 227, 0.2)',
+                borderColor: 'rgba(9, 132, 227, 1)',
+                borderWidth: 1,
+                hoverBackgroundColor: 'rgba(9, 132, 227, 0.2)',
+                hoverBorderColor: 'rgba(9, 132, 227, 1)',
                 data: []
               }
             ]
@@ -56,23 +64,36 @@ class CoronaStats extends Component {
             datasets: [
               {
                 label: 'Total deaths',
-                backgroundColor: 'rgba(75,192,192,0.4)',
-                borderColor: 'rgba(75,192,192,1)',
+                backgroundColor: 'rgba(253, 203, 110, 0.2)',
+                borderColor: 'rgba(253, 203, 110, 1)',
                 fill: false,
                 lineTension: 0,
-                pointBorderColor: 'rgba(75,192,192,1)',
+                pointBorderColor: 'rgba(253, 203, 110, 1)',
                 pointBackgroundColor: '#fff',
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-                pointHoverBorderColor: 'rgba(220,220,220,1)',
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
+                pointBorderWidth: 5,
                 pointHitRadius: 10,
+                pointHoverBackgroundColor: 'rgba(253, 203, 110, 0.2)',
+                pointHoverBorderColor: 'rgba(253, 203, 110, 0.2)',
+                pointHoverBorderWidth: 10,
+                pointRadius: 1,
                 data: []
               }
             ]
-        }
+        },
+        dailyNewDeaths: {
+            labels: [],
+            datasets: [
+              {
+                label: 'Daily New Deaths',
+                backgroundColor: 'rgba(253, 203, 110, 0.2)',
+                borderColor: 'rgba(253, 203, 110, 1)',
+                borderWidth: 1,
+                hoverBackgroundColor: 'rgba(253, 203, 110, 0.2)',
+                hoverBorderColor: 'rgba(253, 203, 110, 1)',
+                data: []
+              }
+            ]
+        },
     }
 
     async componentDidMount() {
@@ -81,26 +102,42 @@ class CoronaStats extends Component {
         const months = {"01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr", "05": "May", "06": "June", "07": "July", "08": "Aug", "09": "Sept", "10": "Oct", "11": "Nov", "12": "Dec"}
 
         var totalCasesData = {...this.state.totalCasesData}
+        var dailyNewCasesData = {...this.state.dailyNewCasesData}
         var recoveredCasesData = {...this.state.recoveredCasesData}
         var deathCasesData = {...this.state.deathCasesData}
+        var dailyNewDeaths = {...this.state.dailyNewDeaths}
 
         try {
             const { data } = await axios.get(config.apiEndpoint + '/corona_stats/get_corona_data')
-            
-            data.items.forEach(item => {
-                totalCasesData.labels.push(months[item.date.substr(3, 2)] + '-' + item.date.substr(0, 2))
-                totalCasesData.datasets[0].data.push(item.totalCases)
+            const { items } = data
 
-                recoveredCasesData.labels.push(months[item.date.substr(3, 2)] + '-' + item.date.substr(0, 2))
-                recoveredCasesData.datasets[0].data.push(item.recoveredOnDay)
+            for (let index = 0; index < items.length; index++) {
 
-                deathCasesData.labels.push(months[item.date.substr(3, 2)] + '-' + item.date.substr(0, 2))
-                deathCasesData.datasets[0].data.push(item.totalDeaths)
-            })
+                totalCasesData.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
+                totalCasesData.datasets[0].data.push(items[index].totalCases)
+
+                dailyNewCasesData.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
+                if(index === 0) {
+                    dailyNewCasesData.datasets[0].data.push(items[index].totalCases)
+                    dailyNewDeaths.datasets[0].data.push(items[index].totalDeaths)
+                } else {
+                    dailyNewCasesData.datasets[0].data.push(items[index].totalCases - items[index - 1].totalCases)
+                    dailyNewDeaths.datasets[0].data.push(items[index].totalDeaths - items[index - 1].totalDeaths)
+                }
+
+                recoveredCasesData.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
+                recoveredCasesData.datasets[0].data.push(items[index].recoveredOnDay)
+
+                deathCasesData.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
+                deathCasesData.datasets[0].data.push(items[index].totalDeaths)
+
+                dailyNewDeaths.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
+            }
 
         } catch(ex) {
-            console.log(ex)
-            if(ex.response.status === 400 && ex.response.data) {
+            if(ex.message) {
+                toast.error(ex.message + ': Reported to developer')
+            } else if(ex.response.status === 400 && ex.response.data) {
                 toast.error(ex.response.data.error)
             }
         }
@@ -109,41 +146,33 @@ class CoronaStats extends Component {
     }
 
     render() { 
-        const {lastUpdated, totalCasesData, recoveredCasesData, deathCasesData} = this.state
-        // const data = {
-        //     labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'January', 'February', 'March', 'April', 'May', 'June', 'July'],
-        //     datasets: [
-        //       {
-        //         label: 'My First dataset',
-        //         fill: false,
-        //         backgroundColor: 'rgba(75,192,192,0.4)',
-        //         borderColor: 'rgba(75,192,192,1)',
-        //         pointBorderColor: 'rgba(75,192,192,1)',
-        //         pointBackgroundColor: '#fff',
-        //         pointBorderWidth: 1,
-        //         pointHoverRadius: 5,
-        //         pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-        //         pointHoverBorderColor: 'rgba(220,220,220,1)',
-        //         pointHoverBorderWidth: 2,
-        //         pointRadius: 1,
-        //         pointHitRadius: 10,
-        //         data: [65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40, 65, 59, 80, 81, 56, 55, 40]
-        //       }
-        //     ]
-        // };
+        const {lastUpdated, totalCasesData, dailyNewCasesData, recoveredCasesData, deathCasesData, dailyNewDeaths} = this.state
         const options = {
             tooltips: {
                 mode: 'index', 
-                intersect: false
+                intersect: false,
+                yAlign: 'bottom'
             }
         }
         return ( 
             <div className='text-center'>
-                <h1 className='mb-0'>Corona Stats India</h1>
+                <ToastContainer autoClose={5000}/>
+                <h1 className='mb-0 text-secondary'>Corona Statistics India <img src={require('../resources/img/ind-flag.gif')} alt='INDIA flag' width="60" border="1 px solid #aaa"></img></h1>
                 <p className='text-muted'>Last updated: {lastUpdated}</p>
-                <Line data={totalCasesData} options={options}/>
-                <Line data={recoveredCasesData} options={options}/>
-                <Line data={deathCasesData} options={options}/>
+                
+                <Row>
+                    <Col className="p-5" lg={12}><Line data={totalCasesData} options={options}/></Col>
+                    <Col className="p-5" lg={12}><Bar data={dailyNewCasesData}/></Col>
+                </Row>
+                
+                <Row>
+                    <Col className="p-5"><Bar data={recoveredCasesData}/></Col>
+                </Row>
+                
+                <Row>
+                    <Col className="p-5" lg={12}><Line data={deathCasesData} options={options}/></Col>
+                    <Col className="p-5" lg={12}><Bar data={dailyNewDeaths}/></Col>
+                </Row>
             </div>
          );
     }

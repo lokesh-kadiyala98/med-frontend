@@ -25,6 +25,7 @@
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.15",
     "machine-learning-applied": "^1.0.4",
+    "ml-regression-simple-linear": "^2.0.2",
     "react": "^16.12.0",
     "react-autosuggest": "^9.4.3",
     "react-bootstrap": "^1.0.0-beta.17",

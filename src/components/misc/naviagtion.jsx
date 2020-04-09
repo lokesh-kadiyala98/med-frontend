@@ -8,7 +8,10 @@ class NavBar extends Component {
         return ( 
             <nav className="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
                 <div className="container">
-                    <Link className="navbar-brand" to="/">Navbar</Link>
+                    <Link className="navbar-brand" style={{fontFamily: 'Krona One'}} to="/">
+                        MED
+                        <img src={require('../resources/img/med-logo.png')} style={{width: '50px', height: '50px'}} alt='med logo' />
+                    </Link>
                     <button className="navbar-toggler collapsed" data-toggle="collapse" data-target="#navbarNav" aria-expanded="false">
                         <span className="navbar-toggler-icon"></span>
                     </button>
