@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import SimpleLinearRegression from 'ml-regression-simple-linear';
 import { toast, ToastContainer } from 'react-toastify'
 import { Line, Bar } from 'react-chartjs-2'
 import { Row, Col } from 'react-bootstrap'
 import axios from 'axios'
 
 import config from '../../config.json'
+import IndiaMap from '../misc/indiaMap';
 
 class CoronaStats extends Component {
     state = { 
@@ -177,24 +177,36 @@ class CoronaStats extends Component {
                 <h1 className='mb-0 text-secondary'>Corona Statistics India <img src={require('../resources/img/ind-flag.gif')} alt='INDIA flag' width="60" border="1 px solid #aaa"></img></h1>
                 <p className='text-muted'>Last updated: {lastUpdated}</p>
                 
-                <div className='bg-light p-5'>
-                    <h2 className="mb-0" style={{color: '#555'}}>COVID-19 Cases:</h2>
-                    <h1 className='font-weight-bold mb-3' style={{color: '#aaa',}}>{totalCasesData.datasets[0].data[totalCasesData.datasets[0].data.length - 1]}</h1>
-                    
-                    <h2 className="mb-0" style={{color: '#555'}}>Recovered:</h2>
-                    <div className='mb-3'>
-                        <span className='font-weight-bold h1' style={{color: '#8ACA2B',}}>{totalRecovered}
-                            <span className="h5"> ({totalRecoveredCasesPercentage}%)</span>
-                        </span>
-                    </div>
-                    
-                    <h2 className="mb-0" style={{color: '#555'}}>Deaths:</h2>
-                    <div className='mb-3'>
-                        <span className='font-weight-bold h1' style={{color: '#696969',}}>{totalDeathCases}
-                            <span className="h5"> ({totalDeathCasesPercentage}%)</span>
-                        </span>
-                    </div>
-                </div>
+                <Row>
+                    <Col>
+                        <div className='bg-light p-5'>
+                            <h2 className="mb-0" style={{color: '#555'}}>COVID-19 Cases:</h2>
+                            <h1 className='font-weight-bold mb-3' style={{color: '#aaa',}}>{totalCasesData.datasets[0].data[totalCasesData.datasets[0].data.length - 1]}</h1>
+                            
+                            <h2 className="mb-0" style={{color: '#555'}}>Recovered:</h2>
+                            <div className='mb-3'>
+                                <span className='font-weight-bold h1' style={{color: '#8ACA2B',}}>{totalRecovered}
+                                    <span className="h5"> ({totalRecoveredCasesPercentage}%)</span>
+                                </span>
+                            </div>
+                            
+                            <h2 className="mb-0" style={{color: '#555'}}>Deaths:</h2>
+                            <div className='mb-3'>
+                                <span className='font-weight-bold h1' style={{color: '#696969',}}>{totalDeathCases}
+                                    <span className="h5"> ({totalDeathCasesPercentage}%)</span>
+                                </span>
+                            </div>
+                        </div>
+                    </Col>
+                    <Col>
+                    </Col>
+                </Row>
+
+                <Row className='mt-3'>
+                    <Col>                
+                      <IndiaMap />
+                    </Col>
+                </Row>
 
                 <Row>
                     <Col className="p-5" lg={12}><Line data={totalCasesData} options={options}/></Col>
