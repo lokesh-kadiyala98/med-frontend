@@ -202,7 +202,7 @@ class CoronaStats extends Component {
                     </Col>
                 </Row>
 
-                <Row className='mt-3'>
+                <Row className='m-5'>
                     <Col>                
                       <IndiaMap />
                     </Col>
