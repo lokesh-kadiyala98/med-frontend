@@ -15,7 +15,7 @@ class StateStats extends Component {
 
     handleSubmit = async (value) => {
         if( value !== this.state.name ) {
-            this.setState({ name: value })
+            this.setState({ name: value, loading: true })
             try {
                 var {data} = await axios({
                     method: 'get',
