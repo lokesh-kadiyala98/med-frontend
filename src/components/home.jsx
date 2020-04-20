@@ -26,7 +26,7 @@ class Home extends Component {
                     <h1 className="display-4 text-center">Coronavirus disease (COVID‑19)</h1>
                     <hr/>
                     <div className="tab">
-                        <button className="tablinks active" onClick={(e) => this.openTab(e, 'India-map')}>Overview</button>
+                        <button className="tablinks active" onClick={(e) => this.openTab(e, 'India-map')}>INDIA</button>
                         <button className="tablinks" onClick={(e) => this.openTab(e, 'Overview')}>Overview</button>
                         <button className="tablinks" onClick={(e) => this.openTab(e, 'Symptoms')}>Symptoms</button>
                         <button className="tablinks" onClick={(e) => this.openTab(e, 'Prevention')}>Prevention</button>

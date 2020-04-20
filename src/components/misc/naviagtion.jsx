@@ -33,7 +33,7 @@ class NavBar extends Component {
                                 user &&
                                 <React.Fragment>
                                     <li className="nav-item">
-                                        <NavLink className="nav-link" to="/profile">{user.name}</NavLink>
+                                        <NavLink className="nav-link" to="/profile">{user.name.charAt(0).toUpperCase() + user.name.slice(1)}</NavLink>
                                     </li>
                                     <li className="nav-item">
                                         <NavLink className="nav-link" to="/logout">Logout</NavLink>
