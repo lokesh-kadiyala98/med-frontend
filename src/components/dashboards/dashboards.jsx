@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom'
 import jwtDecode from 'jwt-decode'
 import ReactModal from 'react-modal'
+import { toast, ToastContainer } from 'react-toastify';
 
 import LinkBox from '../misc/linkBox'
 import Login from './../misc/login'
@@ -19,9 +20,23 @@ class Dashboards extends Component {
         } catch(ex) { }
     }
 
+    componentDidUpdate(prevProps, prevState) {
+        try {
+            const adminToken = localStorage.getItem('admin-token')
+            const { admin } = jwtDecode(adminToken)
+            this.setState({ admin })
+        } catch(ex) { }
+    }
+
+    closeModal = () => {
+        this.setState({ showModal: false })
+        toast.success('Logged in as Admin')
+    }
+
     render() { 
         return ( 
             <section className="row">
+                <ToastContainer autoClose={5000} />
                 <div className="col-sm-6 col-md-4 col-lg-3 mt-3">
                     <NavLink to="/dashboards/knowYourHeart" >
                         <LinkBox 
@@ -53,7 +68,8 @@ class Dashboards extends Component {
                                 topIcon={<i className="fas fa-unlock"></i>} 
                             />
                         </NavLink>
-                    </div> :
+                    </div> 
+                    :
                     <div className="col-sm-6 col-md-4 col-lg-3 mt-3" onClick={() => {this.setState({ showModal:true })}}>
                         <LinkBox 
                             body="Sales Dashboard" 
@@ -79,7 +95,7 @@ class Dashboards extends Component {
                     isOpen={this.state.showModal}
                     contentLabel="Minimal Modal Example">
                     <button className="close" onClick={() => {this.setState({ showModal:false })}}><i className="fas fa-times"></i></button>
-                    <div className="center"><Login apiRoute='/users/admin_login' /></div>
+                    <div className="center"><Login apiRoute='/users/admin_login' closeModal={this.closeModal} /></div>
                 </ReactModal>
             </section>
         );

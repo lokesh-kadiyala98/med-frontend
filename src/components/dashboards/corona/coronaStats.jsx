@@ -3,9 +3,9 @@ import { toast, ToastContainer } from 'react-toastify'
 import { Line, Bar } from 'react-chartjs-2'
 import { Row, Col } from 'react-bootstrap'
 import axios from 'axios'
-
-import config from '../../config.json'
-import IndiaMap from '../misc/indiaMap';
+import config from '../../../config.json'
+import IndiaMap from '../../misc/indiaMap'
+import StateStats from './stateStats';
 
 class CoronaStats extends Component {
     state = { 
@@ -110,15 +110,16 @@ class CoronaStats extends Component {
         var totalRecovered = 0
 
         try {
-            const { data } = await axios.get(config.apiEndpoint + '/corona_stats/get_corona_data')
+            const { data } = await axios.get(config.apiEndpoint + '/corona_stats/get_data')
             const { items } = data
 
+            //trying to gather the data from the object onto all arrays at once
             for (let index = 0; index < items.length; index++) {
 
-                totalCasesData.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
+                totalCasesData.labels.push(months[items[index].date.substr(3, 2)] + ' ' + items[index].date.substr(0, 2))
                 totalCasesData.datasets[0].data.push(items[index].totalCases)
 
-                dailyNewCasesData.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
+                dailyNewCasesData.labels.push(months[items[index].date.substr(3, 2)] + ' ' + items[index].date.substr(0, 2))
                 if(index === 0) {
                     dailyNewCasesData.datasets[0].data.push(items[index].totalCases)
                     dailyNewDeathsData.datasets[0].data.push(items[index].totalDeaths)
@@ -127,14 +128,14 @@ class CoronaStats extends Component {
                     dailyNewDeathsData.datasets[0].data.push(items[index].totalDeaths - items[index - 1].totalDeaths)
                 }
 
-                recoveredCasesData.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
+                recoveredCasesData.labels.push(months[items[index].date.substr(3, 2)] + ' ' + items[index].date.substr(0, 2))
                 recoveredCasesData.datasets[0].data.push(items[index].recoveredOnDay)
                 totalRecovered += items[index].recoveredOnDay
 
-                deathCasesData.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
+                deathCasesData.labels.push(months[items[index].date.substr(3, 2)] + ' ' + items[index].date.substr(0, 2))
                 deathCasesData.datasets[0].data.push(items[index].totalDeaths)
 
-                dailyNewDeathsData.labels.push(months[items[index].date.substr(3, 2)] + '-' + items[index].date.substr(0, 2))
+                dailyNewDeathsData.labels.push(months[items[index].date.substr(3, 2)] + ' ' + items[index].date.substr(0, 2))
             }
 
         } catch(ex) {
@@ -146,6 +147,10 @@ class CoronaStats extends Component {
         }
 
         this.setState({ lastUpdated: formattedDate, totalCasesData, dailyNewCasesData, recoveredCasesData, totalRecovered, deathCasesData, dailyNewDeathsData})
+    }
+
+    handleSubmit = (value) => {
+        console.log(value)
     }
 
     render() { 
@@ -171,14 +176,15 @@ class CoronaStats extends Component {
                 }]
             }
         }
+
         return (
             <div className='text-center'>
                 <ToastContainer autoClose={5000}/>
-                <h1 className='mb-0 text-secondary'>Corona Statistics India <img src={require('../resources/img/ind-flag.gif')} alt='INDIA flag' width="60" border="1 px solid #aaa"></img></h1>
+                <h1 className='mb-0 text-secondary'>Corona Statistics India <img src={require('../../resources/img/ind-flag.gif')} alt='INDIA flag' width="60" border="1 px solid #aaa"></img></h1>
                 <p className='text-muted'>Last updated: {lastUpdated}</p>
                 
                 <Row>
-                    <Col>
+                    <Col lg={6}>
                         <div className='bg-light p-5'>
                             <h2 className="mb-0" style={{color: '#555'}}>COVID-19 Cases:</h2>
                             <h1 className='font-weight-bold mb-3' style={{color: '#aaa',}}>{totalCasesData.datasets[0].data[totalCasesData.datasets[0].data.length - 1]}</h1>
@@ -198,13 +204,14 @@ class CoronaStats extends Component {
                             </div>
                         </div>
                     </Col>
-                    <Col>
+                    <Col lg={6}>
+                        <StateStats />
                     </Col>
                 </Row>
 
-                <Row className='m-5'>
+                <Row className='m-3'>
                     <Col>                
-                      <IndiaMap />
+                        <IndiaMap />
                     </Col>
                 </Row>
 

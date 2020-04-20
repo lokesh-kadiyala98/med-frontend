@@ -10,6 +10,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import ComparisionRadar from './comparisionRadar';
 import ComparisionBar from './comparisionBar';
 import config from '../../config.json'
+import Loading from './../misc/loading';
 
 class KnowYourHeartClassifier extends Component {
     state = { 
@@ -18,6 +19,7 @@ class KnowYourHeartClassifier extends Component {
         data: {},
         score: '',
         analysisCharts : [],
+        loading: true
     }
 
     componentDidMount() {
@@ -317,7 +319,7 @@ class KnowYourHeartClassifier extends Component {
             </Row>
         )
 
-        this.setState({ analysisCharts })
+        this.setState({ analysisCharts, loading: false })
     }
 
     handleCloseModal = () => {
@@ -364,9 +366,13 @@ class KnowYourHeartClassifier extends Component {
                         <button className="save" onClick={this.handleSave}><i className="fas fa-cloud-download-alt"></i></button>
                     </React.Fragment>
                 }
-                {this.state.analysisCharts.map((item, key) => 
-                    <li key={key}>{item}</li>
-                )}
+                {this.state.loading ? 
+                    <Loading />
+                    :
+                    this.state.analysisCharts.map((item, key) => 
+                        <li key={key}>{item}</li>
+                    )
+                }
             </ReactModal>
         );
     }

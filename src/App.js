@@ -13,7 +13,7 @@ import KnowYourHeart from './components/dashboards/knowYourHeart';
 import SalesForecast from './components/dashboards/sales/salesForecasting';
 import ProductSales from './components/dashboards/sales/productSales';
 import BrandSales from './components/dashboards/sales/brandSales';
-import CoronaStats from './components/dashboards/coronaStats';
+import CoronaStats from './components/dashboards/corona/coronaStats';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 import './components/resources/css/style.css'
@@ -29,6 +29,7 @@ class App extends Component {
       const userToken = localStorage.getItem('user-token')
       const { user } = jwtDecode(userToken)
       this.setState({ user })
+      console.log(user)
     } catch(ex) { }
   }
 

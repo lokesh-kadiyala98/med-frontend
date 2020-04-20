@@ -26,7 +26,7 @@ class ForecastGraphs extends Component {
         if(prevProps.toForecast !== toForecast) {
             var items = [...this.state.items]
             if(items.indexOf(toForecast) === -1) {
-                if(items.length < 4) {
+                if(items.length < 2) {
                     items.push(toForecast)
                     this.setState({ items, loading: true })
                     
@@ -89,7 +89,7 @@ class ForecastGraphs extends Component {
 
                 } else {
                     var errors = {...this.state.errors}
-                    errors.message = 'Cannot compare more than 4 items'
+                    errors.message = 'Cannot compare more than 2 items'
                     this.setState({ errors, loading: false })
                 }
             } else {
@@ -230,13 +230,28 @@ class ForecastGraphs extends Component {
     render() {
         const { lineData, items, loading, errors, insightBoards } = this.state
 
+        const options = {
+            tooltips: {
+                mode: 'index', 
+                intersect: false,
+                yAlign: 'bottom'
+            },
+            scales: {
+                yAxes: [{
+                    gridLines: {
+                        drawBorder: false,
+                    }
+                }]
+            }
+        }
+
         if(loading)
             return <Loading />
         
         return ( 
             <React.Fragment>
                 {errors.message && <div className="alert alert-warning">{errors.message}</div>}
-                <Line data={lineData} />
+                <Line data={lineData} options={options} />
                 <div className="mt-1 capsules">
                     {items.map((item, index) => 
                         <li className="delete" key={index} onClick={() => this.handleRemoveMedicine(index)}>
