@@ -14,6 +14,7 @@ import SalesForecast from './components/dashboards/sales/salesForecasting';
 import ProductSales from './components/dashboards/sales/productSales';
 import BrandSales from './components/dashboards/sales/brandSales';
 import CoronaStats from './components/dashboards/corona/coronaStats';
+import Temp from './components/temp';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 import './components/resources/css/style.css'
@@ -49,6 +50,7 @@ class App extends Component {
             <Route path="/login" component={RegisterLogin} />
             <Route path="/profile" component={Profile} />
             <Route path="/dashboards" component={Dashboards} />
+            <Route path="/algoComparision" component={Temp} />
             <Route path="/" component={Home} />
           </Switch>
         </div>
