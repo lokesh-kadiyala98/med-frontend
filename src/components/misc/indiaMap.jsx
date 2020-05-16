@@ -7,7 +7,7 @@ import config from '../../config.json'
 const IndiaMap = () => {
 
     async function getStateWiseCoronaData() {
-        const { data } = await axios.get(config.apiEndpoint + '/corona_stats/get_corona_state_wise_data')
+        const { data } = await axios.get(config.apiEndpoint + '/corona_stats/get_state_wise_data')
         return data.items
     }
 
