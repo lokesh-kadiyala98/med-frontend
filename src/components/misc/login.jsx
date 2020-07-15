@@ -1,7 +1,7 @@
 import React from 'react';
 import Joi from 'joi-browser';
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import Form from './form/form';
 import config from '../../config.json'
@@ -29,22 +29,23 @@ class Login extends Form {
 
     doSubmit = async () => {
         try {
-            var res = await axios({
+            var { data } = await axios({
                 method: 'post',
                 url: config.apiEndpoint + this.props.apiRoute,
                 data: this.state.data
             })
-            if(this.props.apiRoute === '/users/user_login') {
-                localStorage.setItem('user-token', res.data.token)
+
+            if (this.props.apiRoute === '/user/login') {
+                localStorage.setItem('user-token', data.token)
                 window.location = '/'
             } else {
-                localStorage.setItem('admin-token', res.data.token)
+                localStorage.setItem('admin-token', data.token)
                 this.props.closeModal()
             }
         } catch (ex) {
-            if(!ex.response) {
-                toast.error('Reported Developer: Unknown Error')
-            } else if(ex.response.status === 400 && ex.response.data) {
+            if (!ex.response) {
+                toast.error('Unkown Error: Reported to developer')
+            } else if (ex.response.status && ex.response.data) {
                 const errors = {...this.state.errors}
                 errors.username = ex.response.data.error
                 this.setState({ errors })
@@ -53,9 +54,9 @@ class Login extends Form {
     }
 
     render() { 
+        
         return ( 
             <div className="col-xs-12 col-sm-12 col-md-6 border rounded">
-                <ToastContainer autoClose={5000} />
                 <p className="lead">Login</p>
                 {this.renderInput('username', 'Username')}
                 {this.renderInput('password', 'Password', 'password')}                

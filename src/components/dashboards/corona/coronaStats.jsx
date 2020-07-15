@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import { Line, Bar } from 'react-chartjs-2'
 import { Row, Col } from 'react-bootstrap'
 import axios from 'axios'
@@ -110,7 +110,7 @@ class CoronaStats extends Component {
         var totalRecovered = 0
 
         try {
-            const { data } = await axios.get(config.apiEndpoint + '/corona_stats/get_data')
+            const { data } = await axios.get(config.apiEndpoint + '/corona_stats/IN/timeseries_data')
             const { items } = data
 
             //trying to gather the data from the object onto all arrays at once
@@ -149,10 +149,6 @@ class CoronaStats extends Component {
         this.setState({ lastUpdated: formattedDate, totalCasesData, dailyNewCasesData, recoveredCasesData, totalRecovered, deathCasesData, dailyNewDeathsData})
     }
 
-    handleSubmit = (value) => {
-        console.log(value)
-    }
-
     render() { 
         const {lastUpdated, totalCasesData, dailyNewCasesData, recoveredCasesData, totalRecovered, deathCasesData, dailyNewDeathsData} = this.state
 
@@ -179,7 +175,6 @@ class CoronaStats extends Component {
 
         return (
             <div className='text-center'>
-                <ToastContainer autoClose={5000}/>
                 <h1 className='mb-0 text-secondary'>Corona Statistics India <img src={require('../../resources/img/ind-flag.gif')} alt='INDIA flag' width="60" border="1 px solid #aaa"></img></h1>
                 <p className='text-muted'>Last updated: {lastUpdated}</p>
                 

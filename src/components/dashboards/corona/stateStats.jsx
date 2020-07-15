@@ -17,22 +17,20 @@ class StateStats extends Component {
         if( value !== this.state.name ) {
             this.setState({ name: value, loading: true })
             try {
-                var {data} = await axios({
+                var { data } = await axios({
                     method: 'get',
-                    url: config.apiEndpoint + '/corona_stats/get_state_data',
+                    url: config.apiEndpoint + '/corona_stats/state_data',
                     params: {
                         state: value
                     }
                 })
-
-                this.setState({ name: value, cases: data[0].cases, cured: data[0].cured, deceased: data[0].deceased, loading: false })
+                this.setState({ name: value, cases: data.cases, cured: data.cured, deceased: data.deceased, loading: false })
 
             } catch(ex) {
-                console.log(ex)
-                if(ex.response.status === 400 && ex.response.data) {
-                    toast.error(ex.response.data.error)
-                } else if(ex.response.status === 404) {
-                    toast.error('Resource missing')
+                if(ex.response.status === 404) {
+                    toast.error(ex.response.data.message)
+                } else {
+                    toast.error('Unexpected error: Reported to developer')
                 }
             }
         }
@@ -50,7 +48,7 @@ class StateStats extends Component {
         return ( 
             <div className='mt-2' style={{textAlign: 'center'}}>
                 <div style={{display: 'inline-block'}}>
-                    <AutoSuggestInput onClick={this.handleSubmit} url="/corona_stats/get_unique_states" placeholder='Enter State...' />
+                    <AutoSuggestInput onClick={this.handleSubmit} url="/corona_stats/unique_states" placeholder='Enter State...' />
 
                     {loading ? 
                         <div className="mt-3 mb-5 spinner-grow text-warning" role="status">

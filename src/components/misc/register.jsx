@@ -4,6 +4,7 @@ import axios from 'axios';
 
 import Form from './form/form';
 import config from '../../config.json'
+import { toast } from 'react-toastify';
 
 class Register extends Form {
 
@@ -42,13 +43,15 @@ class Register extends Form {
         try {
             var res = await axios({
                 method: 'post',
-                url: config.apiEndpoint + '/users/user_register',
+                url: config.apiEndpoint + '/user/signup',
                 data: this.state.data
             })
             localStorage.setItem('user-token', res.data.token)
             window.location = '/'
         } catch (ex) {
-            if(ex.response.status === 400 && ex.response.data) {
+            if (!ex.response) {
+                toast.error('Unkown Error: Reported to developer')
+            } else if (ex.response.status === 400 && ex.response.data) {
                 const errors = {...this.state.errors}
                 errors.username = ex.response.data.error
                 this.setState({ errors })

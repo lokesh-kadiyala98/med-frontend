@@ -1,10 +1,28 @@
 import React, { Component } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 
+import authService from '../../services/authService'
+import config from '../../config.json'
+
 class NavBar extends Component {
 
+    state = {}
+
+    async componentDidUpdate(prevProps) {
+        if (this.props.userToken && this.props.userToken !== prevProps.userToken) {
+            try {
+                const { data } = await authService.get(config.apiEndpoint + '/user/profile')
+
+                this.setState({ user: data })
+            } catch (e) {
+                
+            }
+        }
+    }
+
     render() { 
-        const { user } = this.props
+        const { user } = this.state
+
         return ( 
             <nav className="navbar navbar-expand-sm navbar-dark bg-primary mb-3">
                 <div className="container">

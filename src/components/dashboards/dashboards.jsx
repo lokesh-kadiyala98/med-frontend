@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom'
-import jwtDecode from 'jwt-decode'
 import ReactModal from 'react-modal'
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import LinkBox from '../misc/linkBox'
 import Login from './../misc/login'
@@ -15,16 +14,14 @@ class Dashboards extends Component {
     componentDidMount() {
         try {
             const adminToken = localStorage.getItem('admin-token')
-            const { admin } = jwtDecode(adminToken)
-            this.setState({ admin })
+            this.setState({ adminToken })
         } catch(ex) { }
     }
 
     componentDidUpdate(prevProps, prevState) {
         try {
             const adminToken = localStorage.getItem('admin-token')
-            const { admin } = jwtDecode(adminToken)
-            this.setState({ admin })
+            this.setState({ adminToken })
         } catch(ex) { }
     }
 
@@ -34,9 +31,10 @@ class Dashboards extends Component {
     }
 
     render() { 
+        const { adminToken } = this.state
+
         return ( 
             <section className="row">
-                <ToastContainer autoClose={5000} />
                 <div className="col-sm-6 col-md-4 col-lg-3 mt-3">
                     <NavLink to="/dashboards/knowYourHeart" >
                         <LinkBox 
@@ -57,7 +55,7 @@ class Dashboards extends Component {
                         />
                     </NavLink>
                 </div>
-                {this.state.admin ?
+                {adminToken ?
                     <div className="col-sm-6 col-md-4 col-lg-3 mt-3">
                         <NavLink to="/dashboards/salesForecast" >
                             <LinkBox 
@@ -95,7 +93,7 @@ class Dashboards extends Component {
                     isOpen={this.state.showModal}
                     contentLabel="Minimal Modal Example">
                     <button className="close" onClick={() => {this.setState({ showModal:false })}}><i className="fas fa-times"></i></button>
-                    <div className="center"><Login apiRoute='/users/admin_login' closeModal={this.closeModal} /></div>
+                    <div className="center"><Login apiRoute='/admin/login' closeModal={this.closeModal} /></div>
                 </ReactModal>
             </section>
         );

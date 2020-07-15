@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import jwtDecode from 'jwt-decode';
+import { ToastContainer } from 'react-toastify'
 
 import NavBar from './components/misc/naviagtion';
 import RegisterLogin from './components/register_login';
@@ -28,8 +28,7 @@ class App extends Component {
   componentDidMount() {
     try {
       const userToken = localStorage.getItem('user-token')
-      const { user } = jwtDecode(userToken)
-      this.setState({ user })
+      this.setState({ userToken })
 
     } catch(ex) { }
   }
@@ -37,7 +36,8 @@ class App extends Component {
   render() { 
     return ( 
       <React.Fragment>
-        <NavBar user={this.state.user} />
+        <ToastContainer autoClose={5000} />
+        <NavBar userToken={this.state.userToken} />
         <div className='container'>
           <Switch>
             <Route path="/dashboards/salesForecast/products" component={ProductSales} />

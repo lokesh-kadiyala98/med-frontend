@@ -12,7 +12,7 @@ class RegisterLogin extends Component {
             <section className="container">
                 <div className="row">
                     <Register />
-                    <Login apiRoute='/users/user_login' />
+                    <Login apiRoute='/user/login' />
                 </div>
             </section>
         );

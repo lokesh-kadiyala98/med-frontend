@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios'
-import { toast, ToastContainer } from 'react-toastify'
+import { toast } from 'react-toastify'
 import _ from 'lodash'
 
 import config from '../../config.json'
@@ -26,10 +26,10 @@ class AutoSuggestInput extends Component {
             })
             this.setState({ items })
         } catch(ex) {
-            if(!ex.status)
+            if(!ex.response.status)
                 toast.error('Opps!! Network issues')
-            else if(ex.response.status === 400 && ex.response.text)
-                toast.error(ex.response.text)
+            else if(ex.response.status === 401 && ex.response.data)
+                toast.error(ex.response.data.error)
         }
     }
 
@@ -54,7 +54,7 @@ class AutoSuggestInput extends Component {
         return (  
             <React.Fragment>
                 <div className="input-group mb-3">
-                    <ToastContainer autoClose={5000} />
+                     
                     <AutoSuggestWrapper items={items} placeholder={this.props.placeholder} onChange={this.onChange} />
                     <div className="input-group-append">
                         <button className="btn btn-outline-secondary" onClick={this.onClick} type="button">Submit</button>

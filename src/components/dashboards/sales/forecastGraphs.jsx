@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Line, Doughnut } from 'react-chartjs-2';
 import axios from 'axios'
 import _ from 'lodash'
+import { toast } from 'react-toastify';
 
 import config from '../../../config.json'
 import HoltWinters from './holtWinters'
@@ -84,7 +85,10 @@ class ForecastGraphs extends Component {
                         
                         this.setState({ holtWintersResults, lineData, errors, loading: false })
                     } catch(ex) {
-                        console.log(ex)
+                        if(!ex.response.status)
+                            toast.error('Opps!! Network issues')
+                        else if(ex.response.status === 401 && ex.response.data)
+                            toast.error(ex.response.data.error)
                     }
 
                 } else {
