@@ -26,21 +26,16 @@ class Home extends Component {
                     <h1 className="display-4 text-center">Coronavirus disease (COVID‑19)</h1>
                     <hr/>
                     <div className="tab">
-                        <button className="tablinks active" onClick={(e) => this.openTab(e, 'India-map')}>Overview</button>
-                        <button className="tablinks" onClick={(e) => this.openTab(e, 'Overview')}>Overview</button>
+                        <button className="tablinks active" onClick={(e) => this.openTab(e, 'Overview')}>Overview</button>
                         <button className="tablinks" onClick={(e) => this.openTab(e, 'Symptoms')}>Symptoms</button>
                         <button className="tablinks" onClick={(e) => this.openTab(e, 'Prevention')}>Prevention</button>
                         <button className="tablinks" onClick={(e) => this.openTab(e, 'Treatments')}>Treatments</button>
                     </div>
 
-                    <div id="India-map" style={{display: 'block'}} className="tabcontent">
-                            <h1 className='display-4 text-center'>COVID-19 India <img src={require('./resources/img/ind-flag.gif')} alt='INDIA flag' width="60" border="1 px solid #aaa"></img></h1>                            
-                            <IndiaMap />
-                    </div>
-
-                    <div id="Overview" className="tabcontent">
+                    <div id="Overview" style={{display: 'block'}} className="tabcontent">
+                        <h1 className='display-4 text-center'>COVID-19 India <img src={require('./resources/img/ind-flag.gif')} alt='INDIA flag' width="60" border="1 px solid #aaa"></img></h1>                            
+                        <IndiaMap />
                         <div className='larger-110'>
-                            <IndiaMap />
                             <p>Coronavirus disease (COVID-19) is an infectious disease caused by a new virus.</p>
                             <p>
                                 The disease causes respiratory illness (like the flu) with symptoms such as a cough, fever, and in more severe cases, difficulty breathing. You can protect yourself by washing your hands frequently, avoiding touching your face, and avoiding close contact (1 meter or 3 feet) with people who are unwell.
@@ -115,6 +110,7 @@ class Home extends Component {
                     <p className="text-center mt-3">Test your COVID-19 risk factor by answering a few questions</p>
                     <div className="text-center">
                         <Link to="/dashboards" className="btn btn-primary btn-lg">Take Test</Link>
+                        <Link to="/dashboards/corona/india" className="ml-5 btn btn-outline-primary btn-lg">Show More</Link>
                     </div>
                 </div>
             </React.Fragment>

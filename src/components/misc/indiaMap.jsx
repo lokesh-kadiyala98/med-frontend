@@ -19,8 +19,8 @@ const IndiaMap = () => {
 
         var data = GoogleCharts.api.visualization.arrayToDataTable([
             ['State Code', 'State', 'Cases', 'Recovered'],
-            ['IN-AP', 'Andhra Pradesh', SWCD[0].cases + SWCD[26].cases, SWCD[0].cured + SWCD[26].cured],
-            ['IN-AN', 'Andaman and Nicobar Islands', SWCD[1].cases, SWCD[1].cured],
+            ['IN-AN', 'Andaman and Nicobar Islands', SWCD[0].cases, SWCD[0].cured],
+            ['IN-AP', 'Andhra Pradesh', SWCD[1].cases + SWCD[26].cases, SWCD[1].cured + SWCD[26].cured],
             ['IN-AR', 'Arunachal Pradesh', SWCD[2].cases, SWCD[2].cured],
             ['IN-AS', 'Assam', SWCD[3].cases, SWCD[3].cured],
             ['IN-BR', 'Bihar', SWCD[4].cases, SWCD[4].cured],
@@ -47,8 +47,8 @@ const IndiaMap = () => {
             ['IN-TN', 'Tamil Nadu', SWCD[25].cases, SWCD[25].cured],
             // ['IN-TG', 'Telangana', SWCD[26].cases, SWCD[26].cured],
             ['IN-TR', 'Tripura', SWCD[27].cases, SWCD[27].cured],
-            ['IN-UT', 'Uttarakhand', SWCD[28].cases, SWCD[28].cured],
-            ['IN-UP', 'Uttar Pradesh', SWCD[29].cases, SWCD[29].cured],
+            ['IN-UP', 'Uttar Pradesh',  SWCD[28].cases, SWCD[28].cured],
+            ['IN-UT', 'Uttarakhand', SWCD[29].cases, SWCD[29].cured],
             ['IN-WB', 'West Bengal', SWCD[30].cases, SWCD[30].cured], 
         ]);
         

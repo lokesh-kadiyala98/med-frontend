@@ -33,7 +33,7 @@ class Form extends Component {
         
         this.setState({ data, errors }, () => {
             if(name === 'weight' || name === 'height') {
-                if(this.state.data.weight && this.state.data.height) {
+                if(this.state.data.weight && this.state.data.height && this.getBmi) {
                     data['bmi'] = this.getBmi(this.state.data.weight, this.state.data.height)
                     this.setState({ data })
                 }

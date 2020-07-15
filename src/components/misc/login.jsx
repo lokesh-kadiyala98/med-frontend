@@ -1,7 +1,7 @@
 import React from 'react';
 import Joi from 'joi-browser';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 
 import Form from './form/form';
 import config from '../../config.json'
@@ -39,10 +39,12 @@ class Login extends Form {
                 window.location = '/'
             } else {
                 localStorage.setItem('admin-token', res.data.token)
-                toast.success('Logged in as Admin')
+                this.props.closeModal()
             }
         } catch (ex) {
-            if(ex.response.status === 400 && ex.response.data) {
+            if(!ex.response) {
+                toast.error('Reported Developer: Unknown Error')
+            } else if(ex.response.status === 400 && ex.response.data) {
                 const errors = {...this.state.errors}
                 errors.username = ex.response.data.error
                 this.setState({ errors })
@@ -53,6 +55,7 @@ class Login extends Form {
     render() { 
         return ( 
             <div className="col-xs-12 col-sm-12 col-md-6 border rounded">
+                <ToastContainer autoClose={5000} />
                 <p className="lead">Login</p>
                 {this.renderInput('username', 'Username')}
                 {this.renderInput('password', 'Password', 'password')}                
