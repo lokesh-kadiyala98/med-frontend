@@ -1,5 +1,4 @@
 import React from 'react';
-import $ from 'jquery'
 import jwtDecode from 'jwt-decode'
 import Joi from 'joi-browser'
 import _ from 'lodash'
@@ -55,17 +54,6 @@ class KnowYourHeart extends Form {
         diet: Joi.allow('').label('Diet'),
     }
 
-    heartBeat() {
-        var hr = '65px'
-        $('.fa-heart').ready(function animateHeart() {
-            hr = (hr === '65px' ? '60px' : '65px')
-            $('.fa-heart').animate({
-                fontSize: hr
-            }, 500, animateHeart);
-    
-        });
-    }
-
     getAge(dateString) {
         var today = new Date();
         var birthDate = new Date(dateString);
@@ -93,7 +81,6 @@ class KnowYourHeart extends Form {
     }
 
     async componentDidMount() {
-        this.heartBeat()
         try {
             const userToken = localStorage.getItem('user-token')
             const {user} = jwtDecode(userToken)

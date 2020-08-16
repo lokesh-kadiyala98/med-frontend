@@ -133,6 +133,17 @@ li {
 .heart-container {
     min-height: 70px;
     margin: 30px;
+    animation: heart-beat 1s infinite;
+}
+
+@keyframes heart-beat {
+    0%, 50% {
+        transform: scale(1);
+    }
+
+    40%, 60% {
+        transform: scale(0.95);
+    }
 }
 
 .group-form-elements {
