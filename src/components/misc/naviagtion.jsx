@@ -14,9 +14,7 @@ class NavBar extends Component {
                 const { data } = await authService.get(config.apiEndpoint + '/user/profile')
 
                 this.setState({ user: data })
-            } catch (e) {
-                
-            }
+            } catch (e) {  }
         }
     }
 

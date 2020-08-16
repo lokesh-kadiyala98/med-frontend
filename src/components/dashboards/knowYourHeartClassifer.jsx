@@ -5,7 +5,7 @@ import { Row, Col } from 'react-bootstrap'
 import html2canvas from 'html2canvas'
 import jsPDF from 'jspdf'
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import ComparisionRadar from './comparisionRadar';
 import ComparisionBar from './comparisionBar';
@@ -358,7 +358,7 @@ class KnowYourHeartClassifier extends Component {
                 ariaHideApp={false}
                 isOpen={this.state.showModal}
                 contentLabel="Minimal Modal Example">
-                <ToastContainer autoClose={5000}/>
+
                 <button className="close" onClick={() => {this.handleCloseModal(); this.props.handleCloseReport();}}><i className="fas fa-times"></i></button>
                 {this.state.user === null ? null:
                     <React.Fragment>

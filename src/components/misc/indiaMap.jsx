@@ -11,9 +11,11 @@ const IndiaMap = () => {
         return data
     }
 
-    GoogleCharts.load('visualization', '1', {'packages': ['geochart']});
-    GoogleCharts.load(drawVisualization);
-    
+    GoogleCharts.load('current', '1', {'packages': ['geochart']});
+    GoogleCharts.load(drawVisualization, {
+        'packages': ['geochart'],
+    });
+
     async function drawVisualization() {
         const covidINData = await getCovidINData()
         
@@ -65,8 +67,8 @@ const IndiaMap = () => {
                 colors: ['#e74c3c']
             },
             datalessRegionColor: '#fff',
-        };
-        
+        }
+
         var geochart = new GoogleCharts.api.visualization.GeoChart(document.getElementById('visualization'));
         
         geochart.draw(data, opts);
